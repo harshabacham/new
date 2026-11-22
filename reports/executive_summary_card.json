@@ -1,0 +1,36 @@
+{
+  "project_metadata": {
+    "hackathon": "Smart India Hackathon 2026",
+    "problem_id": "SIH26184",
+    "title": "Cybercrime Cash-Withdrawal Location Forecasting",
+    "status": "Production-Ready / All Phases Implemented"
+  },
+  "quantitative_highlights": {
+    "best_model_architecture": "Champion StackingClassifier (HistGradientBoosting + Random Forest via Logistic Meta-Learner)",
+    "roc_auc": 0.9348,
+    "pr_auc": 0.4628,
+    "pai_at_10": 8.54,
+    "pei_at_10": 0.637,
+    "precision_at_10_percent": "53.9%",
+    "brier_score_loss": 0.037,
+    "brier_score_reduction": "-64.4%",
+    "optimal_decision_threshold": 0.05,
+    "net_operational_utility_inr": 29215000.0
+  },
+  "governance_and_compliance": {
+    "statute": "Digital Personal Data Protection (DPDP) Act 2023 (India)",
+    "pii_ingestion": "Zero PII (100% anonymized)",
+    "spatial_k_anonymity": "1km x 1km coarse grid aggregation",
+    "patrol_allocation_strategy": "80% Exploitation (Hotspots) / 20% Exploration (Unbiased Background)"
+  },
+  "deliverables_generated": {
+    "master_capstone_thesis": "Cybercrime_Withdrawal_Forecasting_Final_Report.pdf",
+    "jury_pitch_deck": "presentation/SIH26184_Jury_Pitch_Deck.pdf",
+    "interactive_gis_map": "phase_5/interactive_hotspot_forecast_map.html",
+    "streamlit_dashboard": "app.py",
+    "rest_api": "api.py",
+    "standard_geojson": "data/hotspot_forecast_cells.geojson",
+    "police_dispatch_orders": "reports/police_patrol_dispatch_orders.csv",
+    "bank_friction_directives": "reports/bank_atm_friction_directives.csv"
+  }
+}

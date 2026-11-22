@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-11-22T11:27:45.902579",
+  "burst_id": "ALERT-BURST-1795327065",
+  "ingested_complaints": 35,
+  "scam_type": "INVESTMENT_SCAM",
+  "originating_bank": "SBIN",
+  "convergence_window": {
+    "start": "2026-11-22T19:27:45.099099",
+    "peak": "2026-11-23T02:06:45.099115"
+  },
+  "prioritized_interception_cells": [
+    {
+      "rank": 1,
+      "cell_id": "CELL_03_15",
+      "lat": 28.535,
+      "lon": 77.255,
+      "probability": 98.21211372080086,
+      "surge_expected_sweeps": 4.1,
+      "cell_atm_count": 29
+    },
+    {
+      "rank": 2,
+      "cell_id": "CELL_04_15",
+      "lat": 28.545,
+      "lon": 77.255,
+      "probability": 98.21211372080086,
+      "surge_expected_sweeps": 10.6,
+      "cell_atm_count": 28
+    },
+    {
+      "rank": 3,
+      "cell_id": "CELL_13_11",
+      "lat": 28.635,
+      "lon": 77.215,
+      "probability": 95.9481717127671,
+      "surge_expected_sweeps": 2.8,
+      "cell_atm_count": 33
+    },
+    {
+      "rank": 4,
+      "cell_id": "CELL_01_15",
+      "lat": 28.515,
+      "lon": 77.255,
+      "probability": 95.48204619761546,
+      "surge_expected_sweeps": 2.5,
+      "cell_atm_count": 28
+    },
+    {
+      "rank": 5,
+      "cell_id": "CELL_05_16",
+      "lat": 28.555,
+      "lon": 77.265,
+      "probability": 95.21886239640251,
+      "surge_expected_sweeps": 2.4,
+      "cell_atm_count": 35
+    }
+  ],
+  "responsible_ai_notice": "Decisions must be validated by human investigators. Presumption of innocence applies."
+}

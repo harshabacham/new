@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-11-22T13:13:12.697995",
+  "stacked_ensemble": {
+    "PAI@10": 8.54,
+    "PEI@10": 0.637,
+    "Precision@10": 0.539,
+    "PR-AUC": 0.4628,
+    "ROC-AUC": 0.9348
+  },
+  "probability_calibration": {
+    "uncalibrated_brier_score": 0.104,
+    "calibrated_brier_score": 0.037,
+    "calibration_gain_pct": 64.39
+  },
+  "cost_sensitive_optimization": {
+    "optimal_threshold": 0.05,
+    "max_utility_inr": 29218000.0,
+    "f2_score_at_optimal": 0.5517
+  }
+}

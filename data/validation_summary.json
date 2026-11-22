@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-22T13:12:32.634788",
+  "total_records": 27291,
+  "total_cash_outs": 18527,
+  "total_cells": 400,
+  "tests": [
+    {
+      "test_name": "Spatial Grid Integrity",
+      "status": "PASSED",
+      "passed": true,
+      "details": "400 cells generated. Lat: [28.5000, 28.7000], Lon: [77.1000, 77.3000]. ATMs > 0: True"
+    },
+    {
+      "test_name": "Schema Field Completeness",
+      "status": "PASSED",
+      "passed": true,
+      "details": "All 18 essential standardized fields present."
+    },
+    {
+      "test_name": "Null Rate Integrity in Cash-Out Records",
+      "status": "PASSED",
+      "passed": true,
+      "details": "Null values in verified cash-out records: 0 (Expected: 0)"
+    },
+    {
+      "test_name": "Temporal Causal Ordering",
+      "status": "PASSED",
+      "passed": true,
+      "details": "100% causal sequence valid (Incident < Complaint, Incident < Withdrawal). Mean Layering Delay: 14.65 hrs."
+    },
+    {
+      "test_name": "Withdrawal Coordinates Geofence",
+      "status": "PASSED",
+      "passed": true,
+      "details": "All withdrawal coords within bounds: Lat [28.5000, 28.7000], Lon [77.1000, 77.2999]"
+    },
+    {
+      "test_name": "Decoupling of Spatial Entities",
+      "status": "PASSED",
+      "passed": true,
+      "details": "Victim Complaint Location decoupled from Physical Cash-Out Location in 100.0% of events (Decoupled entity requirement satisfied)."
+    },
+    {
+      "test_name": "Statistical Distribution Calibration",
+      "status": "PASSED",
+      "passed": true,
+      "details": "Median Amount: INR 30,960.21, Mean Amount: INR 48,677.25. Cash-out conversion: 67.9% (Benchmark: 68.0%)."
+    }
+  ],
+  "all_tests_passed": true
+}

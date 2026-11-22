@@ -1,0 +1,16 @@
+# Production Dependencies for SIH26184 Cybercrime Forecasting Platform
+numpy>=2.0.0
+pandas>=2.2.0
+scipy>=1.14.0
+scikit-learn>=1.5.0
+shapely>=2.0.0
+folium>=0.17.0
+streamlit>=1.38.0
+streamlit-folium>=0.20.0
+matplotlib>=3.9.0
+pymupdf>=1.24.0
+starlette>=0.38.0
+uvicorn>=0.30.0
+httpx>=0.27.0
+pyarrow>=17.0.0
+joblib>=1.4.0

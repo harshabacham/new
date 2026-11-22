@@ -1,0 +1,10 @@
+{
+  "morans_i": 0.6018,
+  "expected_morans_i": -0.0025,
+  "spatial_autocorrelation": "Highly Positive (p < 0.001)",
+  "dbscan_clusters": 2,
+  "dbscan_noise_points": 233,
+  "dbscan_noise_percent": 1.26,
+  "core_cluster_cells": 189,
+  "total_cells": 400
+}
