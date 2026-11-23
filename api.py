@@ -241,6 +241,8 @@ middleware = [
 ]
 
 app = Starlette(debug=False, routes=routes, middleware=middleware)
+application = app
+handler = app
 
 if __name__ == "__main__":
     import uvicorn

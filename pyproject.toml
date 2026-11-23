@@ -1,0 +1,9 @@
+[project]
+name = "cybercrime-withdrawal-forecasting"
+version = "1.0.0"
+description = "Smart India Hackathon 2026 (SIH26184) - Cybercrime Cash-Withdrawal Location Forecasting Platform"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.vercel]
+entrypoint = "api:app"

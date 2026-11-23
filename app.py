@@ -434,3 +434,10 @@ st.markdown("""
     Smart India Hackathon 2026 | Problem ID: SIH26184 | Capstone Academic Track B.Tech AI/ML | Prepared for Technical Evaluation
 </div>
 """, unsafe_allow_html=True)
+
+# Vercel entrypoint fallback compatibility (exports app, application, and handler)
+try:
+    from api import app, app as application, app as handler
+except Exception:
+    pass
+
