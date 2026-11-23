@@ -1,0 +1,15 @@
+{
+  "status": "HEALTHY",
+  "timestamp": "2026-11-23T17:57:06.501865",
+  "total_cells_loaded": 400,
+  "models_available": [
+    "Gradient_Boosted_Classifier (Option A)",
+    "Poisson_GLM_Regressor (Option B)",
+    "Balanced_Random_Forest_Classifier"
+  ],
+  "eval_metrics": {
+    "PAI@10": 8.81,
+    "PEI@10": 0.656,
+    "Precision@10": "55.9%"
+  }
+}

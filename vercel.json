@@ -1,62 +1,19 @@
 {
-  "version": 2,
-  "builds": [
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "cleanUrls": true,
+  "rewrites": [
     {
-      "src": "app.py",
-      "use": "@vercel/python",
-      "config": {
-        "includeFiles": [
-          "website/**",
-          "phase_5/**",
-          "phase_4/**",
-          "data/**",
-          "reports/**",
-          "presentation/**",
-          "Cybercrime_Withdrawal_Forecasting_Final_Report.pdf"
-        ]
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "app.py"
+      "source": "/health",
+      "destination": "/data/health.json"
     },
     {
-      "src": "/health",
-      "dest": "app.py"
+      "source": "/api/v1/forecasts",
+      "destination": "/data/forecasts.json"
     },
     {
-      "src": "/Cybercrime_Withdrawal_Forecasting_Final_Report.pdf",
-      "dest": "/Cybercrime_Withdrawal_Forecasting_Final_Report.pdf"
-    },
-    {
-      "src": "/styles.css",
-      "dest": "/styles.css"
-    },
-    {
-      "src": "/app.js",
-      "dest": "/app.js"
-    },
-    {
-      "src": "/website/(.*)",
-      "dest": "/website/$1"
-    },
-    {
-      "src": "/reports/(.*)",
-      "dest": "/reports/$1"
-    },
-    {
-      "src": "/data/(.*)",
-      "dest": "/data/$1"
-    },
-    {
-      "src": "/presentation/(.*)",
-      "dest": "/presentation/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/api/v1/benchmarks",
+      "destination": "/phase_4/benchmark_results.json"
     }
   ]
 }
