@@ -10,12 +10,12 @@ set PY_EXE="C:\Users\harsh\AppData\Local\Python\pythoncore-3.14-64\python.exe"
 if exist %PY_EXE% goto :RUN_LOCAL
 
 echo Using system python...
-python -m streamlit run app.py
+python -m streamlit run streamlit_app.py
 goto :END
 
 :RUN_LOCAL
 echo Launching Streamlit dashboard using Python 3.14...
-%PY_EXE% -m streamlit run app.py
+%PY_EXE% -m streamlit run streamlit_app.py
 
 :END
 pause
