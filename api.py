@@ -14,8 +14,9 @@ import pandas as pd
 from datetime import datetime
 
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse, Response
-from starlette.routing import Route
+from starlette.responses import JSONResponse, Response, FileResponse
+from starlette.routing import Route, Mount
+from starlette.staticfiles import StaticFiles
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
@@ -24,6 +25,8 @@ PHASE5_DIR = os.path.join(BASE_DIR, "phase_5")
 PHASE4_DIR = os.path.join(BASE_DIR, "phase_4")
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 DATA_DIR = os.path.join(BASE_DIR, "data")
+REPORTS_DIR = os.path.join(BASE_DIR, "reports")
+WEBSITE_DIR = os.path.join(BASE_DIR, "website")
 
 # Load artifacts
 fc_path = os.path.join(PHASE5_DIR, "latest_operational_forecasts.csv")
@@ -41,14 +44,28 @@ else:
     df_forecasts = None
 benchmarks = json.load(open(bench_path)) if os.path.exists(bench_path) else {}
 
+async def get_thesis_pdf(request):
+    thesis_path = os.path.join(BASE_DIR, "Cybercrime_Withdrawal_Forecasting_Final_Report.pdf")
+    if os.path.exists(thesis_path):
+        return FileResponse(thesis_path, media_type="application/pdf")
+    return JSONResponse({"error": "Thesis PDF not found"}, status_code=404)
+
 async def root(request):
+    accept_header = request.headers.get("accept", "")
+    index_html = os.path.join(WEBSITE_DIR, "index.html")
+    # If accessed from browser (HTML), serve interactive frontend portal
+    if "text/html" in accept_header and os.path.exists(index_html):
+        return FileResponse(index_html)
+        
     return JSONResponse({
         "service": "Cybercrime Cash-Withdrawal Location Forecasting API",
         "hackathon": "Smart India Hackathon 2026 (SIH26184)",
         "academic_track": "Undergraduate B.Tech AI/ML Capstone",
         "version": "1.0.0",
         "status": "OPERATIONAL",
+        "web_portal": "http://127.0.0.1:8000/",
         "endpoints": {
+            "web_portal": "http://127.0.0.1:8000/",
             "health": "/health",
             "latest_forecasts": "/api/v1/forecasts?limit=10&min_prob=0.30",
             "cell_detail": "/api/v1/forecasts/{cell_id}",
@@ -211,7 +228,12 @@ routes = [
     Route("/api/v1/forecasts", get_forecasts),
     Route("/api/v1/forecasts/{cell_id}", get_cell_detail),
     Route("/api/v1/benchmarks", get_benchmarks),
-    Route("/api/v1/simulate/burst", simulate_burst, methods=["POST"])
+    Route("/api/v1/simulate/burst", simulate_burst, methods=["POST"]),
+    Route("/Cybercrime_Withdrawal_Forecasting_Final_Report.pdf", get_thesis_pdf),
+    Mount("/reports", app=StaticFiles(directory=REPORTS_DIR), name="reports"),
+    Mount("/data", app=StaticFiles(directory=DATA_DIR), name="data"),
+    Mount("/presentation", app=StaticFiles(directory=os.path.join(BASE_DIR, "presentation")), name="presentation"),
+    Mount("/", app=StaticFiles(directory=WEBSITE_DIR, html=True), name="website")
 ]
 
 middleware = [
