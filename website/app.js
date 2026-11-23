@@ -508,23 +508,37 @@ async function tryFetchLiveForecasts() {
     if (res.ok) {
       const data = await res.json();
       if (data && data.results && data.results.length > 0) {
-        activeForecasts = data.results.map(r => ({
-          priority_rank: r.priority_rank,
-          grid_cell_id: r.grid_cell_id,
-          centroid_lat: r.coordinates.latitude,
-          centroid_lon: r.coordinates.longitude,
-          lat_min: r.bounding_box.latitude_min,
-          lat_max: r.bounding_box.latitude_max,
-          lon_min: r.bounding_box.longitude_min,
-          lon_max: r.bounding_box.longitude_max,
-          pred_hotspot_prob: r.hotspot_probability,
-          expected_withdrawals: r.expected_withdrawals_24h,
-          count_ci_lower: r.conformal_bounds_90.lower,
-          count_ci_upper: r.conformal_bounds_90.upper,
-          risk_tier: r.risk_tier,
-          top_contributing_factors: r.primary_drivers.join(" | "),
-          sop: r.tactical_directives ? r.tactical_directives[0] : "Monitor vestibules discretely."
-        }));
+        activeForecasts = data.results.map(r => {
+          const lat = r.coordinates ? r.coordinates.latitude : 28.535;
+          const lon = r.coordinates ? r.coordinates.longitude : 77.255;
+          const bbox = r.bounding_box || {};
+          const cBounds = r.conformal_bounds_90 || {};
+          const ciList = r.conformal_90_ci || [0, 5];
+          const drivers = Array.isArray(r.primary_drivers)
+            ? r.primary_drivers.join(" | ")
+            : (r.top_xai_drivers || "Historical Recency Momentum");
+          const sop = (r.tactical_directives && r.tactical_directives.length > 0)
+            ? r.tactical_directives[0]
+            : (r.sop || "Deploy plainclothes unit for active corridor interdiction.");
+
+          return {
+            priority_rank: r.priority_rank,
+            grid_cell_id: r.grid_cell_id,
+            centroid_lat: lat,
+            centroid_lon: lon,
+            lat_min: bbox.latitude_min !== undefined ? bbox.latitude_min : lat - 0.005,
+            lat_max: bbox.latitude_max !== undefined ? bbox.latitude_max : lat + 0.005,
+            lon_min: bbox.longitude_min !== undefined ? bbox.longitude_min : lon - 0.005,
+            lon_max: bbox.longitude_max !== undefined ? bbox.longitude_max : lon + 0.005,
+            pred_hotspot_prob: r.hotspot_probability !== undefined ? r.hotspot_probability : 0.85,
+            expected_withdrawals: r.expected_withdrawals_24h !== undefined ? r.expected_withdrawals_24h : (r.expected_withdrawals || 2.5),
+            count_ci_lower: cBounds.lower !== undefined ? cBounds.lower : ciList[0],
+            count_ci_upper: cBounds.upper !== undefined ? cBounds.upper : ciList[1],
+            risk_tier: r.risk_tier || "CRITICAL",
+            top_contributing_factors: drivers,
+            sop: sop
+          };
+        });
         renderMapLayers();
         populateTable(activeForecasts);
         selectCell(activeForecasts[0]);
