@@ -1,6 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
   "cleanUrls": true,
   "rewrites": [
     {
@@ -13,7 +12,7 @@
     },
     {
       "source": "/api/v1/benchmarks",
-      "destination": "/phase_4/benchmark_results.json"
+      "destination": "/data/benchmark_results.json"
     }
   ]
 }

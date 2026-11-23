@@ -1,0 +1,16 @@
+# Ignore Python runtime files and heavy ML artifacts from Vercel deployment
+# This guarantees Vercel deploys 100% pure static edge assets without building failing serverless functions
+*.py
+*.bat
+*.ipynb
+*.parquet
+requirements.txt
+Dockerfile
+docker-compose.yml
+models/
+tests/
+phase_1/
+phase_2/
+phase_3/
+phase_4/
+phase_5/
