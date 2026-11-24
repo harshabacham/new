@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Leaflet GIS CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Leaflet GIS CSS (Reliable CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -339,6 +339,58 @@
             </ul>
           </div>
         </div>
+
+        <!-- Visual Empirical Diagnostic Curves Gallery -->
+        <div class="charts-gallery-section" style="margin-top: 36px;">
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #f8fafc; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;">📈</span> Empirical Diagnostic Evaluation Curves & Spatial Verification
+          </h3>
+          <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; max-width: 900px; line-height: 1.5;">
+            High-resolution visual intelligence generated across walk-forward backtesting windows. Click any chart to view or expand in full resolution.
+          </p>
+          <div class="charts-gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+            
+            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #38bdf8; margin: 0;">ROC, PR & Calibration Diagnostics</h4>
+                <a href="model_performance_charts.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
+              </div>
+              <a href="model_performance_charts.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
+                <img src="model_performance_charts.png" alt="Model Performance ROC and PR Curves" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
+              </a>
+              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
+                Walk-forward ROC (0.9348) and PR curves across all 9 paradigms, alongside isotonic probability calibration dropping Brier loss by 64.4%.
+              </p>
+            </div>
+
+            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #34d399; margin: 0;">Cost Utility & Conformal Bounds</h4>
+                <a href="advanced_diagnostic_curves.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
+              </div>
+              <a href="advanced_diagnostic_curves.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
+                <img src="advanced_diagnostic_curves.png" alt="Cost Utility and Conformal Coverage Curves" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
+              </a>
+              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
+                Asymmetric loss cost-utility optimization identifying threshold τ* = 0.05 (₹29.21M utility), feature importance, and 90% conformal bands.
+              </p>
+            </div>
+
+            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fb7185; margin: 0;">Spatial ESDA & Mule Clusters</h4>
+                <a href="esda_spatial_clusters.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
+              </div>
+              <a href="esda_spatial_clusters.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
+                <img src="esda_spatial_clusters.png" alt="ESDA Spatial Clusters and Moran's I" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
+              </a>
+              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
+                Global Moran's I (+0.6018, p &lt; 0.0001) spatial autocorrelation scatter and terrestrial density clusters vs ATM terminal infrastructure.
+              </p>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -535,8 +587,8 @@
     </div>
   </footer>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet JS (Reliable CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <!-- Application Script -->
   <script src="app.js"></script>
 </body>
