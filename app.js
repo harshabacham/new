@@ -1,6 +1,6 @@
 /**
  * CYBERWATCH // SIH26184
- * Enterprise Cybercrime Intelligence Command Center Engine
+ * Enterprise Cybercrime Intelligence Command Center Engine (Tailwind / Shadcn Edition)
  */
 
 // Embedded Fallback Dataset (Guarantees 100% offline functionality)
@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFilterChips();
   setupSimulator();
   tryFetchLiveForecasts();
+  if (window.lucide) lucide.createIcons();
 });
 
 // 1. Live IST Clock
@@ -190,18 +191,26 @@ function initViewTabs() {
 }
 
 function switchView(panelId, activeBtn) {
-  document.querySelectorAll(".nav-tab-btn").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(".deck-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-tab-btn").forEach(b => {
+    b.className = "nav-tab-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap";
+  });
+  document.querySelectorAll(".deck-panel").forEach(p => {
+    p.classList.remove("active");
+    p.classList.add("hidden");
+  });
 
   if (activeBtn) {
-    activeBtn.classList.add("active");
+    activeBtn.className = "nav-tab-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-slate-950 bg-cyan-400 font-bold transition-all whitespace-nowrap active shadow-[0_2px_10px_rgba(56,189,248,0.4)]";
   } else {
     const matchingBtn = document.querySelector(`.nav-tab-btn[data-target="${panelId}"]`);
-    if (matchingBtn) matchingBtn.classList.add("active");
+    if (matchingBtn) {
+      matchingBtn.className = "nav-tab-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-slate-950 bg-cyan-400 font-bold transition-all whitespace-nowrap active shadow-[0_2px_10px_rgba(56,189,248,0.4)]";
+    }
   }
 
   const targetPanel = document.getElementById(panelId);
   if (targetPanel) {
+    targetPanel.classList.remove("hidden");
     targetPanel.classList.add("active");
   }
 
@@ -211,6 +220,7 @@ function switchView(panelId, activeBtn) {
       mapInstance.invalidateSize();
     }, 150);
   }
+  if (window.lucide) lucide.createIcons();
 }
 
 // 3. Initialize Leaflet Map
@@ -258,6 +268,7 @@ function initMap() {
   if (btnTop10) {
     btnTop10.addEventListener("click", function() {
       this.classList.toggle("active");
+      this.classList.toggle("opacity-60");
       if (mapInstance.hasLayer(top10LayerGroup)) {
         mapInstance.removeLayer(top10LayerGroup);
       } else {
@@ -270,6 +281,7 @@ function initMap() {
   if (btnExploration) {
     btnExploration.addEventListener("click", function() {
       this.classList.toggle("active");
+      this.classList.toggle("opacity-60");
       if (mapInstance.hasLayer(explorationLayerGroup)) {
         mapInstance.removeLayer(explorationLayerGroup);
       } else {
@@ -291,7 +303,7 @@ function initMap() {
 function jumpToSector(lat, lon, zoom) {
   if (mapInstance) {
     mapInstance.setView([lat, lon], zoom);
-    showToast(`Focused coordinates: ${lat.toFixed(3)}°N, ${lon.toFixed(3)}°E`);
+    showToast(`Focused sector at ${lat.toFixed(3)}°N, ${lon.toFixed(3)}°E`);
   }
 }
 
@@ -388,18 +400,20 @@ function inspectCell(cell) {
   const driversContainer = document.getElementById("insp-drivers");
 
   if (idEl) idEl.innerText = cell.grid_cell_id;
-  if (rankEl) rankEl.innerText = `RANK #${cell.priority_rank}`;
+  if (rankEl) rankEl.innerText = `PRIORITY #${cell.priority_rank}`;
   
   if (tierEl) {
-    tierEl.innerText = `${cell.risk_tier} RISK`;
-    tierEl.className = cell.risk_tier === "CRITICAL" ? "insp-badge" : "insp-badge badge-elevated";
+    tierEl.innerText = `${cell.risk_tier} HOTSPOT`;
+    tierEl.className = cell.risk_tier === "CRITICAL"
+      ? "px-2 py-0.5 rounded text-[11px] font-mono font-bold uppercase bg-rose-500/15 border border-rose-500/40 text-rose-300"
+      : "px-2 py-0.5 rounded text-[11px] font-mono font-bold uppercase bg-amber-500/15 border border-amber-500/40 text-amber-300";
   }
 
   if (coordsEl) coordsEl.innerText = `${cell.centroid_lat.toFixed(3)}°N, ${cell.centroid_lon.toFixed(3)}°E (1km × 1km Quadrant)`;
   if (probEl) probEl.innerText = `${(cell.pred_hotspot_prob * 100).toFixed(1)}%`;
   if (countEl) countEl.innerText = `${cell.expected_withdrawals}`;
   if (ciEl) ciEl.innerText = `[${cell.count_ci_lower} - ${cell.count_ci_upper}]`;
-  if (atmsEl) atmsEl.innerText = `${cell.cell_atm_count || 10} Kiosks`;
+  if (atmsEl) atmsEl.innerText = `${cell.cell_atm_count || 10} Terminals`;
   if (transitEl) transitEl.innerText = (cell.transit_score !== undefined ? cell.transit_score.toFixed(3) : "0.768");
   if (sopEl) sopEl.innerText = cell.sop || "Deploy plainclothes unit for active corridor interdiction.";
 
@@ -408,7 +422,7 @@ function inspectCell(cell) {
     const rawDrivers = (cell.top_contributing_factors || "Historical Recency Momentum").split("|");
     rawDrivers.forEach(d => {
       const chip = document.createElement("span");
-      chip.className = "driver-chip";
+      chip.className = "px-2.5 py-1 rounded-full text-[11px] font-medium bg-cyan-500/10 border border-cyan-500/30 text-cyan-300";
       chip.innerText = d.trim();
       driversContainer.appendChild(chip);
     });
@@ -442,7 +456,7 @@ STATUTORY DIRECTIVES:
 ================================================================================`;
 
   navigator.clipboard.writeText(text).then(() => {
-    showToast("Section 91 CrPC Docket copied to clipboard!");
+    showToast("Section 91 CrPC Field Docket copied to clipboard!");
   }).catch(() => {
     showToast("Docket ready for dispatch review.");
   });
@@ -475,8 +489,10 @@ function setupFilterChips() {
   const chips = document.querySelectorAll(".filter-chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
-      chips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
+      chips.forEach(c => {
+        c.className = "filter-chip px-3 py-1.5 rounded-full font-semibold border border-slate-800 bg-slate-900 text-slate-400 hover:text-white transition-all";
+      });
+      chip.className = "filter-chip px-3 py-1.5 rounded-full font-semibold border border-cyan-500 bg-cyan-500/15 text-cyan-300 transition-all active";
       activeFilterTier = chip.getAttribute("data-filter");
       currentPage = 1;
       applyFiltersAndSort();
@@ -563,26 +579,30 @@ function renderTablePage() {
 
   pageSlice.forEach(item => {
     const tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-900/40 transition-colors";
     const isTop10 = item.priority_rank <= 10;
-    const tierBadgeClass = item.risk_tier === "CRITICAL" ? "tier-critical" : "tier-elevated";
+    const tierBadgeClass = item.risk_tier === "CRITICAL"
+      ? "bg-rose-500/15 border-rose-500/40 text-rose-300"
+      : "bg-amber-500/15 border-amber-500/40 text-amber-300";
 
     tr.innerHTML = `
-      <td><span class="mono" style="font-weight:700; color:${isTop10 ? 'var(--rose)' : 'var(--text-dim)'};">#${item.priority_rank}</span></td>
-      <td><span class="mono" style="color:var(--cyan); font-weight:600;">${item.grid_cell_id}</span></td>
-      <td class="mono" style="font-size:0.78rem; color:#94a3b8;">${item.centroid_lat.toFixed(3)}°N, ${item.centroid_lon.toFixed(3)}°E</td>
-      <td><span class="mono" style="color:${isTop10 ? 'var(--rose)' : 'var(--amber)'}; font-weight:800;">${(item.pred_hotspot_prob * 100).toFixed(1)}%</span></td>
-      <td class="mono">${item.expected_withdrawals} <span style="color:#64748b; font-size:0.75rem;">[${item.count_ci_lower}-${item.count_ci_upper}]</span></td>
-      <td class="mono">${item.cell_atm_count || 10}</td>
-      <td><span class="tier-badge ${tierBadgeClass}">${item.risk_tier}</span></td>
-      <td style="font-size:0.78rem; color:#cbd5e1; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.top_contributing_factors}</td>
-      <td style="text-align:right;">
-        <button class="hud-pill" onclick="inspectFromTable('${item.grid_cell_id}')" style="font-size:0.72rem;">Inspect ↗</button>
+      <td class="py-2.5 px-4"><span class="font-mono font-bold ${isTop10 ? 'text-rose-400' : 'text-slate-400'}">#${item.priority_rank}</span></td>
+      <td class="py-2.5 px-4"><span class="font-mono font-semibold text-cyan-400">${item.grid_cell_id}</span></td>
+      <td class="py-2.5 px-4 font-mono text-slate-400 text-[11px]">${item.centroid_lat.toFixed(3)}°N, ${item.centroid_lon.toFixed(3)}°E</td>
+      <td class="py-2.5 px-4"><span class="font-mono font-extrabold ${isTop10 ? 'text-rose-400' : 'text-amber-400'}">${(item.pred_hotspot_prob * 100).toFixed(1)}%</span></td>
+      <td class="py-2.5 px-4 font-mono">${item.expected_withdrawals} <span class="text-slate-500 text-[11px]">[${item.count_ci_lower}-${item.count_ci_upper}]</span></td>
+      <td class="py-2.5 px-4 font-mono text-slate-300">${item.cell_atm_count || 10}</td>
+      <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${tierBadgeClass}">${item.risk_tier}</span></td>
+      <td class="py-2.5 px-4 text-slate-300 max-w-[260px] truncate">${item.top_contributing_factors}</td>
+      <td class="py-2.5 px-4 text-right">
+        <button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 text-[11px] font-semibold transition-all" onclick="inspectFromTable('${item.grid_cell_id}')">Inspect ↗</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
 
   updatePaginationControls(startIdx + 1, endIdx, total);
+  if (window.lucide) lucide.createIcons();
 }
 
 function inspectFromTable(cellId) {
@@ -620,7 +640,7 @@ function updatePaginationControls(start, end, total) {
 
     for (let p = startPage; p <= endPage; p++) {
       const pBtn = document.createElement("button");
-      pBtn.className = `page-btn ${p === currentPage ? 'active' : ''}`;
+      pBtn.className = `px-2.5 py-1 text-xs rounded border font-mono ${p === currentPage ? 'bg-cyan-500 border-cyan-400 text-slate-950 font-bold' : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'}`;
       pBtn.innerText = p;
       pBtn.onclick = () => { currentPage = p; renderTablePage(); };
       pageContainer.appendChild(pBtn);
@@ -641,12 +661,18 @@ function changePageSize(newSize) {
 
 // 8. ML Diagnostic Plot Tabs
 function switchPlotTab(tabId, btn) {
-  document.querySelectorAll(".plot-tab-pill").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(".plot-tab-content").forEach(c => c.style.display = "none");
+  document.querySelectorAll(".plot-tab-pill").forEach(b => {
+    b.className = "plot-tab-pill px-3 py-1.5 rounded-lg font-semibold bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all";
+  });
+  document.querySelectorAll(".plot-tab-content").forEach(c => c.classList.add("hidden"));
 
-  if (btn) btn.classList.add("active");
+  if (btn) {
+    btn.className = "plot-tab-pill px-3 py-1.5 rounded-lg font-semibold bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 transition-all active";
+  }
   const target = document.getElementById(tabId);
-  if (target) target.style.display = "block";
+  if (target) {
+    target.classList.remove("hidden");
+  }
 }
 
 // 9. Lightbox Modal
@@ -655,13 +681,18 @@ function openLightbox(imgSrc) {
   const modalImg = document.getElementById("lightbox-img");
   if (modal && modalImg) {
     modalImg.src = imgSrc;
-    modal.classList.add("active");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
   }
+  if (window.lucide) lucide.createIcons();
 }
 
 function closeLightbox() {
   const modal = document.getElementById("lightbox-modal");
-  if (modal) modal.classList.remove("active");
+  if (modal) {
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+  }
 }
 
 // 10. Helpline 1930 Incident Burst Simulator
@@ -703,8 +734,8 @@ function setupSimulator() {
     if (titleEl) titleEl.innerText = `🚨 ACTIVE INTERDICTION ALERT: ${n} COMPLAINTS INGESTED`;
     if (descEl) {
       descEl.innerHTML = `
-        Estimated cash-out convergence window: <strong>+${meanDelayHours} Hours</strong> (Opening at <strong>${arrivalStr} IST</strong>).<br>
-        High-risk corridor identified: <strong style="color:var(--rose);">${targetHub}</strong>. Plainclothes interdiction dispatched.
+        Estimated cash-out convergence window: <strong>+${meanDelayHours} Hours</strong> (Opening around <strong>${arrivalStr} IST</strong>).<br>
+        High-risk convergence corridor identified: <strong class="text-rose-400">${targetHub}</strong>. Plainclothes interdiction dispatched.
       `;
     }
 
@@ -718,21 +749,21 @@ function setupSimulator() {
       feed.innerHTML = "";
       for (let i = 0; i < n; i++) {
         const item = document.createElement("div");
-        item.className = "terminal-line";
+        item.className = "flex justify-between py-1 border-b border-slate-900 text-[11px]";
         const indLoss = Math.round(loss * (0.7 + Math.random() * 0.6));
         const indDelay = (8 + Math.random() * 7).toFixed(1);
         const indCell = candidates[Math.floor(Math.random() * candidates.length)];
         const compId = `NCRP-1930-${104820 + i}`;
 
         item.innerHTML = `
-          <span><strong style="color:var(--cyan);">${compId}</strong> | ${category}</span>
-          <span>Loss: ₹${indLoss.toLocaleString()} | Window: +${indDelay}h -> <span style="color:var(--rose); font-weight:bold;">${indCell}</span></span>
+          <span><strong class="text-cyan-400">${compId}</strong> | ${category}</span>
+          <span>Loss: ₹${indLoss.toLocaleString()} | Window: +${indDelay}h -> <span class="text-rose-400 font-bold">${indCell}</span></span>
         `;
         feed.appendChild(item);
       }
     }
 
-    showToast(`Simulation processed: ${n} reports projected into ${targetHub}`);
+    showToast(`Simulation processed: ${n} complaints projected to converge on ${targetHub}`);
   });
 }
 
@@ -781,7 +812,7 @@ async function tryFetchLiveForecasts() {
         applyFiltersAndSort();
         renderMapLayers();
         inspectCell(activeForecasts[0]);
-        console.log("CYBERWATCH: Loaded complete 400-quadrant operational forecast surface.");
+        console.log("CYBERWATCH: Ingested complete 400-quadrant operational forecast surface.");
       }
     }
   } catch (e) {
@@ -796,17 +827,17 @@ function showToast(message) {
   if (!container) return;
 
   const toast = document.createElement("div");
-  toast.className = "toast";
+  toast.className = "flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900/95 border border-cyan-500/50 text-white text-xs font-semibold shadow-2xl backdrop-blur-md pointer-events-auto transition-all duration-300";
   toast.innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
     <span>${message}</span>
   `;
 
   container.appendChild(toast);
+  if (window.lucide) lucide.createIcons();
   setTimeout(() => {
     toast.style.opacity = "0";
-    toast.style.transform = "translateY(10px)";
-    toast.style.transition = "all 0.25s ease";
-    setTimeout(() => toast.remove(), 250);
+    toast.style.transform = "translateY(8px)";
+    setTimeout(() => toast.remove(), 300);
   }, 3200);
 }
