@@ -1,24 +1,26 @@
 /**
- * CyberWatch - Delhi Police Cybercrime ATM Interdiction System
- * Operational Client Engine for Police Officers & Duty Desks
+ * CyberWatch AI - Cybercrime Cash-Withdrawal Location Forecasting Platform
+ * Master Application Engine
  */
 
-// Police Station and Locality Mapping for Delhi NCR High-Risk Quadrants
-const POLICE_SECTORS = {
+// Comprehensive Police Station and Delhi Landmark Registry
+const DELHI_POLICE_REGISTRY = {
   "CELL_03_15": {
     name: "Nehru Place Commercial Hub",
     ps: "PS Kalkaji / PS Nehru Place",
     key_points: "Nehru Place Metro Gate 2, Computer Market Vestibules",
     strategy: "Plainclothes static surveillance (2 officers) + 1 Beat PCR",
     shift: "14:00 - 22:00 IST (Alpha)",
-    sop: "Deploy plainclothes static unit at Nehru Place Metro Gate 2. Observe ATM vestibules discretely for individuals conducting repeated multi-card cash sweeps. Alert bank security."
+    transit: "High (Metro Interchange & Terminal)",
+    sop: "Deploy plainclothes static unit at Nehru Place Metro Gate 2. Observe ATM vestibules discretely for individuals conducting repeated multi-card cash sweeps. Inform bank security."
   },
   "CELL_04_15": {
-    name: "Kalkaji / Okhla Commercial Hub",
+    name: "Kalkaji / Okhla Commercial Corridor",
     ps: "PS Kalkaji / PS Okhla Industrial Area",
     key_points: "Maa Anandmayee Marg ATM Cluster",
     strategy: "Motorcycle patrol sweeps every 15 minutes",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "High (Industrial Arterial)",
     sop: "Frequent physical sweeps of standalone off-site ATM kiosks along Maa Anandmayee Marg. Verify identity of individuals loitering near cash dispensers."
   },
   "CELL_13_11": {
@@ -27,6 +29,7 @@ const POLICE_SECTORS = {
     key_points: "Outer Circle Blocks B, C & E ATM Rows",
     strategy: "Static foot patrol across commercial banks",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Extreme (Primary Metro Interchange)",
     sop: "Station static plainclothes beat officers outside high-volume private bank branches along Outer Circle. Coordinate with security guards to watch for non-home debit card sweeps."
   },
   "CELL_01_15": {
@@ -35,6 +38,7 @@ const POLICE_SECTORS = {
     key_points: "District Centre Mall & Multiplex ATM Vestibules",
     strategy: "Plainclothes monitoring + Mall security liaison",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Moderate (Shopping District Transit)",
     sop: "Liaise with mall security supervisors. Position plainclothes officers near high-footfall basement and exterior ATM vestibules."
   },
   "CELL_05_16": {
@@ -43,6 +47,7 @@ const POLICE_SECTORS = {
     key_points: "Central Market Ring Road ATMs",
     strategy: "Motorcycle sweep during market rush",
     shift: "15:00 - 21:00 IST (Market Peak)",
+    transit: "High (Ring Road Corridor)",
     sop: "Intensify patrol checks between 16:00 and 20:00 IST during peak market rush. Inspect unattended ATM kiosks for skimming devices or loiterers."
   },
   "CELL_03_17": {
@@ -51,6 +56,7 @@ const POLICE_SECTORS = {
     key_points: "Jasola Apollo Commercial Complex",
     strategy: "Patrol vehicle spot checks",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Moderate (Interstate Highway Access)",
     sop: "Conduct randomized spot checks at isolated ATM kiosks along Mathura Road and Jasola Commercial Towers."
   },
   "CELL_02_15": {
@@ -59,6 +65,7 @@ const POLICE_SECTORS = {
     key_points: "Main Market & Shivalik Road ATMs",
     strategy: "Beat constable foot patrol",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Moderate (Commercial Fringe)",
     sop: "Beat staff to maintain log of visited ATM vestibules. Check emergency alarm buttons and ensure guard presence."
   },
   "CELL_02_16": {
@@ -67,6 +74,7 @@ const POLICE_SECTORS = {
     key_points: "Panchsheel Flyover Commercial Fringe",
     strategy: "Mobile PCR van positioning",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Moderate (Flyover Junction)",
     sop: "Station mobile PCR van at Panchsheel / Chirag Dilli intersection for rapid interdiction upon 1930 dispatch."
   },
   "CELL_14_12": {
@@ -75,7 +83,8 @@ const POLICE_SECTORS = {
     key_points: "Ajmeri Gate Exit & Main Bazar ATMs",
     strategy: "Joint Railway & Local Police sweep",
     shift: "12:00 - 20:00 IST (Transit Peak)",
-    sop: "Joint surveillance with RPF. Mules exploit high passenger transit volume for cash extractions before boarding trains."
+    transit: "Extreme (Railway Terminal)",
+    sop: "Joint surveillance with RPF. Mules exploit high passenger transit volume for cash extractions before boarding outbound trains."
   },
   "CELL_13_12": {
     name: "Barakhamba Road / Mandi House Corridor",
@@ -83,15 +92,15 @@ const POLICE_SECTORS = {
     key_points: "KG Marg & Tolstoy Marg Bank Branches",
     strategy: "Static cruiser deployment",
     shift: "14:00 - 20:00 IST (Banking Hours)",
+    transit: "High (Financial District)",
     sop: "Monitor commercial bank branch ATMs for unusual bulk transaction frequencies. Advise bank branch managers to flag multi-card cash sweeps."
   }
 };
 
 function getSectorData(cell) {
-  const custom = POLICE_SECTORS[cell.grid_cell_id];
+  const custom = DELHI_POLICE_REGISTRY[cell.grid_cell_id];
   if (custom) return custom;
 
-  // Smart fallback
   const lat = cell.centroid_lat;
   const lon = cell.centroid_lon;
   let defaultPS = "PS Central Delhi";
@@ -113,12 +122,13 @@ function getSectorData(cell) {
     key_points: "Commercial Market ATM Vestibules",
     strategy: "Routine motorcycle sweep every 30 minutes",
     shift: "14:00 - 22:00 IST (Alpha)",
+    transit: "Moderate (Arterial Transit)",
     sop: cell.sop || "Conduct routine checks of standalone ATM kiosks. Inspect vestibules for suspicious loitering."
   };
 }
 
-// Embedded Fallback High-Risk Priority Roster
-const FALLBACK_POLICE_ROSTER = [
+// Embedded Fallback Priority Hotspots (100% Offline Resilience)
+const FALLBACK_FORECASTS = [
   {
     priority_rank: 1, grid_cell_id: "CELL_03_15",
     centroid_lat: 28.535, centroid_lon: 77.255,
@@ -181,12 +191,22 @@ const FALLBACK_POLICE_ROSTER = [
   }
 ];
 
+// Anti-bias exploration patrol zones (20% random allocation)
+const EXPLORATION_ZONES = [
+  { lat: 28.505, lon: 77.105, radius: 900, label: "Exploration Zone Alpha (South-West)" },
+  { lat: 28.685, lon: 77.125, radius: 900, label: "Exploration Zone Bravo (North-West)" },
+  { lat: 28.695, lon: 77.285, radius: 900, label: "Exploration Zone Charlie (North-East)" },
+  { lat: 28.515, lon: 77.285, radius: 900, label: "Exploration Zone Delta (South-East)" }
+];
+
 // Global State
 let mapInstance = null;
-let patrolLayerGroup = null;
-let activeForecasts = FALLBACK_POLICE_ROSTER;
-let filteredForecasts = FALLBACK_POLICE_ROSTER;
-let selectedCell = FALLBACK_POLICE_ROSTER[0];
+let top10LayerGroup = null;
+let explorationLayerGroup = null;
+
+let activeForecasts = FALLBACK_FORECASTS;
+let filteredForecasts = FALLBACK_FORECASTS;
+let selectedCell = FALLBACK_FORECASTS[0];
 let activeFilterTier = "ALL";
 
 // Initialize on DOM Ready
@@ -229,29 +249,59 @@ function initMap() {
     maxZoom: 16
   });
 
-  // Dark Matter tiles for clean tactical view
+  // CartoDB Dark Matter Basemap
   L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &bull; Delhi Police Cyber Cell',
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &bull; CyberWatch AI',
     subdomains: "abcd",
     maxZoom: 19
   }).addTo(mapInstance);
 
-  patrolLayerGroup = L.layerGroup().addTo(mapInstance);
+  top10LayerGroup = L.layerGroup().addTo(mapInstance);
+  explorationLayerGroup = L.layerGroup().addTo(mapInstance);
+
   renderMapLayers();
+
+  // Layer toggle listeners
+  const btnTop10 = document.getElementById("btn-toggle-top10");
+  if (btnTop10) {
+    btnTop10.addEventListener("click", function() {
+      this.classList.toggle("active");
+      this.classList.toggle("opacity-50");
+      if (mapInstance.hasLayer(top10LayerGroup)) {
+        mapInstance.removeLayer(top10LayerGroup);
+      } else {
+        mapInstance.addLayer(top10LayerGroup);
+      }
+    });
+  }
+
+  const btnExploration = document.getElementById("btn-toggle-exploration");
+  if (btnExploration) {
+    btnExploration.addEventListener("click", function() {
+      this.classList.toggle("active");
+      this.classList.toggle("opacity-50");
+      if (mapInstance.hasLayer(explorationLayerGroup)) {
+        mapInstance.removeLayer(explorationLayerGroup);
+      } else {
+        mapInstance.addLayer(explorationLayerGroup);
+      }
+    });
+  }
 }
 
 // 3. Jump to Sector
 function jumpToSector(lat, lon, zoom) {
   if (mapInstance) {
     mapInstance.setView([lat, lon], zoom);
-    showToast(`Centered patrol map on ${lat.toFixed(3)}°N, ${lon.toFixed(3)}°E`);
+    showToast(`Centered map on ${lat.toFixed(3)}°N, ${lon.toFixed(3)}°E`);
   }
 }
 
-// 4. Render Map Markers
+// 4. Render Map Markers & Polygons
 function renderMapLayers() {
-  if (!mapInstance || !patrolLayerGroup) return;
-  patrolLayerGroup.clearLayers();
+  if (!mapInstance || !top10LayerGroup) return;
+  top10LayerGroup.clearLayers();
+  explorationLayerGroup.clearLayers();
 
   activeForecasts.slice(0, 10).forEach(cell => {
     const sData = getSectorData(cell);
@@ -265,7 +315,7 @@ function renderMapLayers() {
       color: color,
       weight: 2.5,
       fillColor: fillColor,
-      fillOpacity: 0.35
+      fillOpacity: isTop3 ? 0.38 : 0.22
     });
 
     const popupHtml = `
@@ -287,14 +337,33 @@ function renderMapLayers() {
           Shift: <strong>${sData.shift}</strong>
         </div>
         <button onclick="selectAndFocusCell('${cell.grid_cell_id}')" style="width:100%; padding: 6px; font-size:11px; font-weight:bold; background:#2563eb; color:#ffffff; border:none; border-radius:6px; cursor:pointer;">
-          Load Police Dispatch Order &rarr;
+          Inspect Tactical Directive &rarr;
         </button>
       </div>
     `;
 
     circle.bindPopup(popupHtml);
     circle.on("click", () => inspectCell(cell));
-    patrolLayerGroup.addLayer(circle);
+    top10LayerGroup.addLayer(circle);
+  });
+
+  // Exploration Zones
+  EXPLORATION_ZONES.forEach(z => {
+    const circle = L.circle([z.lat, z.lon], {
+      radius: z.radius,
+      color: "#38bdf8",
+      weight: 1.5,
+      dashArray: "4, 6",
+      fillColor: "#0284c7",
+      fillOpacity: 0.12
+    });
+    circle.bindPopup(`
+      <div style="font-family:'Plus Jakarta Sans',sans-serif; padding: 4px;">
+        <strong style="color:#38bdf8; font-size:12px;">${z.label}</strong>
+        <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Anti-bias patrol safeguard sector (20% allocation)</div>
+      </div>
+    `);
+    explorationLayerGroup.addLayer(circle);
   });
 }
 
@@ -304,16 +373,30 @@ function inspectCell(cell) {
   const sData = getSectorData(cell);
 
   const nameEl = document.getElementById("insp-cell-name");
+  const idEl = document.getElementById("insp-cell-id");
   const psEl = document.getElementById("insp-ps-name");
+  const tierEl = document.getElementById("insp-tier");
   const rankEl = document.getElementById("insp-rank");
   const probEl = document.getElementById("insp-prob");
+  const countEl = document.getElementById("insp-count");
   const atmsEl = document.getElementById("insp-atms");
   const sopEl = document.getElementById("insp-sop");
 
   if (nameEl) nameEl.innerText = sData.name;
-  if (psEl) psEl.innerText = `Police Station Jurisdiction: ${sData.ps}`;
+  if (idEl) idEl.innerText = `Sector ID: ${cell.grid_cell_id} • ${cell.centroid_lat.toFixed(3)}°N, ${cell.centroid_lon.toFixed(3)}°E`;
+  if (psEl) psEl.innerText = `Police Station: ${sData.ps}`;
   if (rankEl) rankEl.innerText = `PRIORITY #${cell.priority_rank}`;
+
+  if (tierEl) {
+    const isCrit = cell.priority_rank <= 5;
+    tierEl.innerText = isCrit ? "CRITICAL HOTSPOT" : "ELEVATED WATCH";
+    tierEl.className = isCrit
+      ? "px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-rose-500/15 border border-rose-500/40 text-rose-300"
+      : "px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-amber-500/15 border border-amber-500/40 text-amber-300";
+  }
+
   if (probEl) probEl.innerText = `${(cell.pred_hotspot_prob * 100).toFixed(1)}%`;
+  if (countEl) countEl.innerText = `${cell.expected_withdrawals}`;
   if (atmsEl) atmsEl.innerText = `${cell.cell_atm_count || 20} Kiosks`;
   if (sopEl) sopEl.innerText = sData.sop;
 }
@@ -324,7 +407,7 @@ function selectAndFocusCell(cellId) {
   if (match) {
     inspectCell(match);
     jumpToSector(match.centroid_lat, match.centroid_lon, 14);
-    const mapSec = document.getElementById("patrol-map");
+    const mapSec = document.getElementById("gis-map");
     if (mapSec) mapSec.scrollIntoView({ behavior: "smooth" });
   }
 }
@@ -333,8 +416,8 @@ function selectAndFocusCell(cellId) {
 function copyPoliceBriefing() {
   if (!selectedCell) return;
   const sData = getSectorData(selectedCell);
-  const text = `🚨 DELHI POLICE CYBER CELL - TACTICAL DISPATCH DIRECTIVE 🚨
-Sector: ${sData.name}
+  const text = `🚨 CYBERWATCH AI TACTICAL DISPATCH DIRECTIVE 🚨
+Sector: ${sData.name} (${selectedCell.grid_cell_id})
 Jurisdiction: ${sData.ps}
 Key Extraction Point: ${sData.key_points}
 Vulnerable ATMs: ${selectedCell.cell_atm_count || 20} Kiosks
@@ -361,6 +444,8 @@ function applyFilters() {
 
   filteredForecasts = activeForecasts.slice(0, 10).filter(cell => {
     const sData = getSectorData(cell);
+    if (activeFilterTier === "CRITICAL" && cell.priority_rank > 5) return false;
+
     if (query) {
       const matchName = sData.name.toLowerCase().includes(query);
       const matchPS = sData.ps.toLowerCase().includes(query);
@@ -383,7 +468,7 @@ function renderTable() {
     tbody.innerHTML = `
       <tr>
         <td colspan="8" class="text-center py-6 text-slate-500 text-xs">
-          No matching police sectors found. Try searching for "Kalkaji", "Connaught", or "Saket".
+          No matching sectors found. Try searching for "Kalkaji", "Connaught", or "Saket".
         </td>
       </tr>
     `;
@@ -445,16 +530,16 @@ function setupFilterChips() {
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => {
-        c.className = "filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-brand-surface border border-brand-border text-slate-400 hover:text-white transition-all text-xs";
+        c.className = "filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-brand-surface border border-slate-800 text-slate-400 hover:text-white transition-all text-xs";
       });
-      chip.className = "filter-chip px-3.5 py-1.5 rounded-lg font-bold bg-blue-600/20 border border-blue-500 text-blue-300 transition-all active text-xs";
+      chip.className = "filter-chip px-3.5 py-1.5 rounded-lg font-bold bg-cyan-500/15 border border-cyan-500 text-cyan-300 transition-all active text-xs";
       activeFilterTier = chip.getAttribute("data-filter");
       applyFilters();
     });
   });
 }
 
-// 8. 1930 Fraud Complaint Cash-Out Tracker
+// 8. 1930 Fraud Complaint Cash-Out Simulator
 function setupSimulator() {
   const sliderLoss = document.getElementById("sim-loss");
   const lblLoss = document.getElementById("lbl-sim-loss");
@@ -482,7 +567,7 @@ function setupSimulator() {
       { name: "Nehru Place Commercial Hub", ps: "PS Kalkaji / PS Nehru Place", id: "CELL_03_15" },
       { name: "Connaught Place / Rajiv Chowk", ps: "PS Connaught Place", id: "CELL_13_11" },
       { name: "Saket District Centre", ps: "PS Saket", id: "CELL_01_15" },
-      { name: "Kalkaji Commercial Fringe", ps: "PS Kalkaji", id: "CELL_04_15" }
+      { name: "Kalkaji Commercial Corridor", ps: "PS Kalkaji", id: "CELL_04_15" }
     ];
     const topCandidate = candidates[Math.floor(Math.random() * candidates.length)];
 
@@ -513,7 +598,47 @@ function setupSimulator() {
   });
 }
 
-// 9. Edge Data Ingestion
+// 9. Collapsible Benchmarks Toggle
+function toggleBenchmarks() {
+  const container = document.getElementById("benchmarks-container");
+  const lbl = document.getElementById("lbl-benchmarks-toggle");
+  const icon = document.getElementById("icon-benchmarks-toggle");
+
+  if (!container) return;
+
+  const isHidden = container.classList.contains("hidden");
+  if (isHidden) {
+    container.classList.remove("hidden");
+    if (lbl) lbl.innerText = "Hide Academic Benchmarks";
+    if (icon) icon.style.transform = "rotate(180deg)";
+  } else {
+    container.classList.add("hidden");
+    if (lbl) lbl.innerText = "Show Academic Benchmarks";
+    if (icon) icon.style.transform = "rotate(0deg)";
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+// 10. Lightbox Modal
+function openLightbox(imgSrc) {
+  const modal = document.getElementById("lightbox-modal");
+  const modalImg = document.getElementById("lightbox-img");
+  if (modal && modalImg) {
+    modalImg.src = imgSrc;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
+}
+
+function closeLightbox() {
+  const modal = document.getElementById("lightbox-modal");
+  if (modal) {
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+  }
+}
+
+// 11. Edge Data Ingestion
 async function tryFetchLiveForecasts() {
   try {
     const res = await fetch("data/forecasts.json");
@@ -548,15 +673,15 @@ async function tryFetchLiveForecasts() {
   }
 }
 
-// 10. Toast Notification Engine
+// 12. Toast Notification Engine
 function showToast(message) {
   const container = document.getElementById("toast-container");
   if (!container) return;
 
   const toast = document.createElement("div");
-  toast.className = "flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900 border border-blue-500/50 text-white text-xs font-semibold shadow-2xl backdrop-blur-md pointer-events-auto transition-all duration-300";
+  toast.className = "flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900 border border-cyan-500/50 text-white text-xs font-semibold shadow-2xl backdrop-blur-md pointer-events-auto transition-all duration-300";
   toast.innerHTML = `
-    <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
+    <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
     <span>${message}</span>
   `;
 
