@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CyberWatch - Cybercrime Cash-Withdrawal Location Predictor</title>
+  <title>CyberWatch - Delhi Police Cybercrime ATM Interdiction System</title>
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,17 +19,16 @@
         extend: {
           colors: {
             brand: {
-              base: '#0b0f19',
-              surface: '#111827',
-              card: '#161f33',
-              cardHover: '#1c2842',
-              border: '#1f293d',
-              borderLight: '#2b3954',
-              cyan: '#38bdf8',
+              base: '#0b101b',
+              surface: '#121826',
+              card: '#182235',
+              cardHover: '#1f2c45',
+              border: '#23304a',
+              blue: '#38bdf8',
               emerald: '#34d399',
               rose: '#fb7185',
               amber: '#fbbf24',
-              indigo: '#818cf8'
+              police: '#2563eb'
             }
           },
           fontFamily: {
@@ -48,176 +47,163 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 
   <style>
-    /* Clean custom scrollbar */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0b0f19; }
-    ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #0b101b; }
+    ::-webkit-scrollbar-thumb { background: #23304a; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
 
     .leaflet-container {
-      background: #0b0f19 !important;
+      background: #0b101b !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
     }
     .leaflet-popup-content-wrapper {
-      background: #111827 !important;
+      background: #121826 !important;
       color: #f8fafc !important;
-      border: 1px solid #1f293d !important;
+      border: 1px solid #23304a !important;
       border-radius: 12px !important;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
       padding: 4px !important;
     }
-    .leaflet-popup-tip {
-      background: #111827 !important;
-    }
+    .leaflet-popup-tip { background: #121826 !important; }
     .leaflet-control-zoom a {
-      background-color: #111827 !important;
+      background-color: #121826 !important;
       color: #94a3b8 !important;
-      border-color: #1f293d !important;
+      border-color: #23304a !important;
       border-radius: 8px !important;
     }
     .leaflet-control-zoom a:hover {
-      background-color: #1f293d !important;
+      background-color: #1f2c45 !important;
       color: #38bdf8 !important;
     }
 
-    @keyframes pulse-subtle {
+    @keyframes pulse-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.15); }
+      50% { opacity: 0.5; transform: scale(1.2); }
     }
     .pulse-dot {
-      animation: pulse-subtle 2s infinite ease-in-out;
+      animation: pulse-dot 2s infinite ease-in-out;
     }
   </style>
 </head>
 <body class="bg-brand-base text-slate-100 font-sans antialiased min-h-screen selection:bg-cyan-500/20 selection:text-cyan-300">
 
-  <!-- ==================== 1. CLEAN TOP NAVIGATION BAR ==================== -->
+  <!-- ==================== 1. TOP POLICE COMMAND BAR ==================== -->
   <header class="sticky top-0 z-50 bg-brand-base/95 backdrop-blur-md border-b border-brand-border">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 gap-4">
         
-        <!-- Logo & Title -->
-        <a href="#" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-all shadow-sm">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
+        <!-- Police Badge & App Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shadow-sm">
+            <i data-lucide="shield-alert" class="w-5 h-5"></i>
           </div>
           <div>
-            <div class="font-bold text-base text-white tracking-tight flex items-center gap-2">
-              CyberWatch <span class="text-[11px] text-cyan-300 font-semibold px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-800/60">Delhi NCR</span>
+            <div class="font-extrabold text-base text-white tracking-tight flex items-center gap-2">
+              CyberWatch <span class="text-[11px] font-bold text-blue-300 px-2 py-0.5 rounded-full bg-blue-950/80 border border-blue-800/60 uppercase">Delhi Police Cyber Cell</span>
             </div>
-            <div class="text-xs text-slate-400 font-normal">Cash-Withdrawal Hotspot Predictor</div>
+            <div class="text-xs text-slate-400 font-medium">Cybercrime ATM Cash-Out Interdiction System</div>
           </div>
-        </a>
+        </div>
 
-        <!-- Main User Navigation Links -->
-        <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
-          <a href="#map-section" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
-            <i data-lucide="map" class="w-4 h-4 text-cyan-400"></i>
-            <span>Live Map</span>
+        <!-- Navigation Links for Officers -->
+        <nav class="hidden md:flex items-center gap-1 text-sm font-semibold text-slate-300">
+          <a href="#patrol-map" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i>
+            <span>Patrol Map</span>
           </a>
-          <a href="#hotspots-section" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
-            <i data-lucide="list-ordered" class="w-4 h-4 text-emerald-400"></i>
-            <span>High-Risk Areas</span>
+          <a href="#patrol-roster" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-emerald-400"></i>
+            <span>Duty Roster</span>
           </a>
-          <a href="#checker-section" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
-            <i data-lucide="calculator" class="w-4 h-4 text-amber-400"></i>
-            <span>Incident Checker</span>
+          <a href="#fraud-tracker" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
+            <i data-lucide="search" class="w-4 h-4 text-amber-400"></i>
+            <span>1930 Fraud Tracker</span>
           </a>
-          <a href="#how-it-works" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
-            <i data-lucide="cpu" class="w-4 h-4 text-indigo-400"></i>
-            <span>How It Works</span>
-          </a>
-          <a href="#downloads-section" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
+          <a href="#duty-downloads" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-all flex items-center gap-1.5">
             <i data-lucide="download" class="w-4 h-4 text-purple-400"></i>
-            <span>Downloads</span>
+            <span>Download Duty Sheets</span>
           </a>
         </nav>
 
-        <!-- Right Quick Actions -->
+        <!-- Live Clock & Shift Badge -->
         <div class="flex items-center gap-3">
-          <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-brand-border text-xs text-slate-400">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-surface border border-brand-border text-xs text-slate-300">
             <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
-            <span id="live-ist-clock" class="font-mono">IST --:--:--</span>
+            <span id="live-ist-clock" class="font-mono font-bold">IST --:--:--</span>
           </div>
-          <a href="#map-section" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all shadow-md shadow-cyan-500/20 flex items-center gap-1.5">
-            <i data-lucide="crosshair" class="w-4 h-4"></i>
-            <span>View Today's Hotspots</span>
-          </a>
+          <span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-500/15 border border-rose-500/40 text-rose-300">
+            Shift Alpha (14:00 - 22:00)
+          </span>
         </div>
 
       </div>
     </div>
   </header>
 
-  <!-- ==================== 2. WELCOMING HERO & SUMMARY ==================== -->
-  <section class="relative overflow-hidden py-10 md:py-14 border-b border-brand-border bg-gradient-to-b from-brand-surface/40 to-brand-base">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- ==================== 2. DAILY OPERATIONAL POLICE BRIEFING ==================== -->
+  <section class="py-8 border-b border-brand-border bg-gradient-to-b from-brand-surface/60 to-brand-base">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
-      <!-- Headline & Subtitle -->
-      <div class="max-w-3xl mb-8">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 mb-3">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          AI-Powered Cybercrime Prevention for Law Enforcement & Banks
+      <!-- Alert Banner for Duty Officers -->
+      <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="siren" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-rose-200">DAILY PATROL DIRECTIVE: HIGH WITHDRAWAL RISK ALERT</h2>
+            <p class="text-xs text-slate-300 mt-0.5 leading-relaxed">
+              Cybercrime money mules are projected to sweep ATM clusters in <strong>South Delhi (Nehru Place / Saket)</strong> and <strong>New Delhi (Connaught Place)</strong> between 14:00 and 22:00 IST today. Beat staff must conduct frequent physical checks.
+            </p>
+          </div>
         </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-          Predict ATM Cash-Out Hotspots <br class="hidden sm:block">
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">Before Fraudsters Strike</span>
-        </h1>
-        <p class="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed">
-          When cybercrime victims report fraud to Helpline 1930, money mules rush to withdraw cash from ATMs. 
-          CyberWatch predicts which ATM clusters in Delhi NCR will be targeted 12 to 24 hours in advance, allowing police patrols to intercept them and recover stolen funds.
-        </p>
+        <a href="#patrol-map" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shrink-0 text-center transition-all flex items-center justify-center gap-1.5">
+          <i data-lucide="eye" class="w-4 h-4"></i>
+          <span>View High-Risk ATMs</span>
+        </a>
       </div>
 
-      <!-- 4 Clear User-Friendly Metric Cards -->
+      <!-- 4 Practical Police Operational Metrics -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         
-        <!-- Card 1 -->
-        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border hover:border-slate-700 transition-all shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span class="font-medium">Forecast Accuracy</span>
-            <div class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-              <i data-lucide="check-circle" class="w-4 h-4"></i>
-            </div>
+        <!-- Metric 1 -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border shadow-sm">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-medium">Flagged ATM Hubs Today</span>
+            <i data-lucide="alert-octagon" class="w-4 h-4 text-rose-400"></i>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">93.5%</div>
-          <div class="text-xs text-slate-400 mt-1">ROC-AUC score across 18,400 holdout tests</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-rose-400 font-mono">10 Hubs</div>
+          <div class="text-xs text-slate-400 mt-0.5">High probability of mule cashouts</div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border hover:border-slate-700 transition-all shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span class="font-medium">Targeting Efficiency</span>
-            <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-              <i data-lucide="target" class="w-4 h-4"></i>
-            </div>
+        <!-- Metric 2 -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border shadow-sm">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-medium">Total ATMs Under Watch</span>
+            <i data-lucide="credit-card" class="w-4 h-4 text-cyan-400"></i>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">8.8x</div>
-          <div class="text-xs text-slate-400 mt-1">Captures 88% of cash-outs in top 10% area</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">184 ATMs</div>
+          <div class="text-xs text-slate-400 mt-0.5">Across top vulnerable sectors</div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border hover:border-slate-700 transition-all shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span class="font-medium">Estimated Protected</span>
-            <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
-              <i data-lucide="shield-alert" class="w-4 h-4"></i>
-            </div>
+        <!-- Metric 3 -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border shadow-sm">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-medium">Response Lead Time</span>
+            <i data-lucide="hourglass" class="w-4 h-4 text-amber-400"></i>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">&#8377;2.92 Cr</div>
-          <div class="text-xs text-slate-400 mt-1">Net fraud funds intercepted by timely patrols</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">2 - 4 Hours</div>
+          <div class="text-xs text-slate-400 mt-0.5">Window to deploy before mules strike</div>
         </div>
 
-        <!-- Card 4 -->
-        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border hover:border-slate-700 transition-all shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span class="font-medium">Monitored Grid</span>
-            <div class="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-              <i data-lucide="map-pin" class="w-4 h-4"></i>
-            </div>
+        <!-- Metric 4 -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-brand-border shadow-sm">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-medium">Estimated Fraud Prevented</span>
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400 font-mono">400 km&sup2;</div>
-          <div class="text-xs text-slate-400 mt-1">Continuous 1km x 1km sectors in Delhi NCR</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">&#8377;2.92 Crore</div>
+          <div class="text-xs text-slate-400 mt-0.5">Recovered via proactive patrol sweeps</div>
         </div>
 
       </div>
@@ -225,163 +211,136 @@
     </div>
   </section>
 
-  <!-- ==================== MAIN CONTENT SECTIONS ==================== -->
+  <!-- ==================== MAIN POLICE WORKSPACE ==================== -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
 
-    <!-- ==================== SECTION 1: LIVE MAP & LOCATION INSPECTOR ==================== -->
-    <section id="map-section" class="space-y-6">
+    <!-- ==================== SECTION 1: LIVE PATROL MAP & DISPATCH DIRECTIVE ==================== -->
+    <section id="patrol-map" class="space-y-6">
       
-      <!-- Section Header with District Quick Filters -->
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-1">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">
             <i data-lucide="map" class="w-3.5 h-3.5"></i>
-            Interactive Geospatial Surface
+            Geospatial Patrol Deployment
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Delhi NCR ATM Cash-Out Hotspots</h2>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Delhi NCR ATM Patrol Map</h2>
           <p class="text-sm text-slate-400 mt-1 max-w-2xl">
-            Click on any red or orange hotspot circle on the map to inspect its risk details, ATM density, and recommended police patrol shift.
+            Click on any highlighted ATM hub to inspect nearest Police Station jurisdiction, vulnerable ATMs, and recommended plainclothes patrol assignments.
           </p>
         </div>
 
-        <!-- District Quick Jump Buttons -->
+        <!-- Quick Jump by Police District -->
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs font-medium text-slate-400">Quick Jump:</span>
-          <button onclick="jumpToSector(28.535, 77.255, 13)" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:text-cyan-300 text-slate-300 transition-all">
-            Nehru Place / GK
+          <span class="text-xs font-bold text-slate-400">Focus Sector:</span>
+          <button onclick="jumpToSector(28.535, 77.255, 14)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500 hover:text-cyan-300 text-slate-300 transition-all">
+            Nehru Place Hub
           </button>
-          <button onclick="jumpToSector(28.635, 77.215, 13)" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:text-cyan-300 text-slate-300 transition-all">
+          <button onclick="jumpToSector(28.635, 77.215, 14)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500 hover:text-cyan-300 text-slate-300 transition-all">
             Connaught Place
           </button>
-          <button onclick="jumpToSector(28.515, 77.255, 13)" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:text-cyan-300 text-slate-300 transition-all">
-            Saket Centre
+          <button onclick="jumpToSector(28.515, 77.255, 14)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500 hover:text-cyan-300 text-slate-300 transition-all">
+            Saket District Centre
           </button>
-          <button onclick="jumpToSector(28.570, 77.230, 11)" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:text-cyan-300 text-slate-300 transition-all">
-            Reset View
+          <button onclick="jumpToSector(28.570, 77.230, 11)" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-surface border border-brand-border hover:border-cyan-500 hover:text-cyan-300 text-slate-300 transition-all">
+            Full Delhi View
           </button>
         </div>
       </div>
 
-      <!-- Map & Location Detail Card Layout -->
+      <!-- Map & Location Action Card Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         <!-- Left: Map Container (8 cols) -->
         <div class="lg:col-span-8 bg-brand-surface rounded-2xl border border-brand-border overflow-hidden shadow-xl flex flex-col">
           
-          <!-- Map Toolbar / Legend -->
+          <!-- Map Legend Bar -->
           <div class="px-4 py-3 bg-brand-surface border-b border-brand-border flex items-center justify-between gap-4 flex-wrap text-xs">
-            <div class="flex items-center gap-3">
-              <span class="font-medium text-slate-400">Map Legend:</span>
-              <span class="flex items-center gap-1.5 text-rose-300 font-medium">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                Top-10 Critical Hotspots
+            <div class="flex items-center gap-4">
+              <span class="font-bold text-slate-400">Legend:</span>
+              <span class="flex items-center gap-1.5 text-rose-300 font-semibold">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                Top Priority ATM Hub (Imminent Risk)
               </span>
-              <span class="flex items-center gap-1.5 text-amber-300 font-medium">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                Elevated Risk Areas
+              <span class="flex items-center gap-1.5 text-amber-300 font-semibold">
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                Secondary Watchlist Area
               </span>
             </div>
-
-            <!-- Layer Toggles -->
-            <div class="flex items-center gap-2">
-              <button id="btn-toggle-top10" class="px-2.5 py-1 rounded-md bg-rose-500/15 border border-rose-500/40 text-rose-300 font-semibold transition-all active">
-                Top 10 Hotspots
-              </button>
-              <button id="btn-toggle-exploration" class="px-2.5 py-1 rounded-md bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-semibold transition-all active">
-                Exploration Patrols
-              </button>
-            </div>
+            <span class="text-slate-400 font-mono text-[11px]">Click any circle to load duty instructions</span>
           </div>
 
-          <!-- The Leaflet Map Element -->
-          <div id="leaflet-map" class="w-full h-[480px] sm:h-[540px] z-10"></div>
+          <!-- Leaflet Map Container -->
+          <div id="leaflet-map" class="w-full h-[500px] z-10"></div>
           
-          <div class="px-4 py-2 bg-brand-surface/90 border-t border-brand-border text-xs text-slate-400 flex items-center justify-between">
-            <span>Click any marker to view police dispatch protocol &bull; CartoDB Dark Matter Tiles</span>
-            <span class="text-cyan-400 font-medium">Live Telemetry Ingested</span>
+          <div class="px-4 py-2.5 bg-brand-surface/90 border-t border-brand-border text-xs text-slate-400 flex items-center justify-between">
+            <span>High-density commercial ATM vestibules &bull; Updated for Current Tactical Shift</span>
+            <span class="text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+              Live Telemetry Ingested
+            </span>
           </div>
         </div>
 
-        <!-- Right: Selected Location Detail Card (4 cols) -->
+        <!-- Right: Police Action Directive Card (4 cols) -->
         <div class="lg:col-span-4 bg-brand-surface rounded-2xl border border-brand-border p-6 shadow-xl space-y-5">
           
-          <!-- Card Header -->
+          <!-- Header -->
           <div class="border-b border-brand-border pb-4">
             <div class="flex items-center justify-between mb-2">
               <span id="insp-tier" class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-rose-500/15 border border-rose-500/40 text-rose-300">
-                CRITICAL HOTSPOT
+                CRITICAL TARGET
               </span>
               <span id="insp-rank" class="font-mono text-xs font-bold text-slate-400">PRIORITY #1</span>
             </div>
             <h3 id="insp-cell-name" class="text-xl font-bold text-white tracking-tight">Nehru Place / Greater Kailash Hub</h3>
-            <div id="insp-cell-id" class="font-mono text-xs text-slate-400 mt-1">Sector ID: CELL_03_15 &bull; 28.535&deg;N, 77.255&deg;E</div>
+            <div id="insp-ps-name" class="text-xs font-semibold text-cyan-400 mt-1">Police Station Jurisdiction: PS Kalkaji / PS Nehru Place</div>
           </div>
 
-          <!-- Key Probability Numbers -->
+          <!-- Key Numbers for Duty Officer -->
           <div class="grid grid-cols-2 gap-3">
-            <div class="p-3.5 rounded-xl bg-brand-base border border-brand-border">
-              <div class="text-xs text-slate-400 font-medium mb-1">Withdrawal Risk</div>
+            <div class="p-3 rounded-xl bg-brand-base border border-brand-border">
+              <div class="text-[11px] text-slate-400 font-medium mb-1">Mule Cashout Risk</div>
               <div id="insp-prob" class="text-2xl font-extrabold text-rose-400 font-mono">98.2%</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">High probability</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">High probability</div>
             </div>
-            <div class="p-3.5 rounded-xl bg-brand-base border border-brand-border">
-              <div class="text-xs text-slate-400 font-medium mb-1">Expected Today</div>
-              <div id="insp-count" class="text-2xl font-extrabold text-cyan-400 font-mono">3.1</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">Predicted cashouts</div>
-            </div>
-          </div>
-
-          <!-- Context Information -->
-          <div class="space-y-2.5 text-xs">
-            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
-              <span class="text-slate-400 flex items-center gap-1.5">
-                <i data-lucide="credit-card" class="w-3.5 h-3.5 text-emerald-400"></i>
-                ATM Kiosks in Sector:
-              </span>
-              <span id="insp-atms" class="font-bold text-white">29 Terminals</span>
-            </div>
-            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
-              <span class="text-slate-400 flex items-center gap-1.5">
-                <i data-lucide="navigation" class="w-3.5 h-3.5 text-indigo-400"></i>
-                Transit & Metro Connectivity:
-              </span>
-              <span id="insp-transit" class="font-bold text-white">High (Metro Interchange)</span>
-            </div>
-            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
-              <span class="text-slate-400 flex items-center gap-1.5">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
-                Recommended Patrol Hours:
-              </span>
-              <span class="font-bold text-amber-300">14:00 - 22:00 IST</span>
+            <div class="p-3 rounded-xl bg-brand-base border border-brand-border">
+              <div class="text-[11px] text-slate-400 font-medium mb-1">ATMs to Monitor</div>
+              <div id="insp-atms" class="text-2xl font-extrabold text-white font-mono">29 Kiosks</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Within 1km cluster</div>
             </div>
           </div>
 
-          <!-- Why this area is at risk -->
-          <div>
-            <div class="text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-cyan-400"></i>
-              Why this area is targeted:
+          <!-- Practical Police Operational Checklist -->
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
+              <span class="text-slate-400 font-medium">Duty Shift Assignment:</span>
+              <span class="font-bold text-amber-300">14:00 - 22:00 IST (Alpha)</span>
             </div>
-            <div id="insp-drivers" class="text-xs text-slate-400 bg-brand-base p-3 rounded-xl border border-brand-border leading-relaxed">
-              Historical Recency Momentum (30d) &bull; Weekly Repeat Withdrawal Bursts near major commercial metro stations.
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
+              <span class="text-slate-400 font-medium">Recommended Personnel:</span>
+              <span class="font-bold text-white">2 Plainclothes + 1 PCR Van</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-brand-base border border-brand-border">
+              <span class="text-slate-400 font-medium">Key Extraction Point:</span>
+              <span class="font-bold text-slate-200">Metro Gate 2 &amp; Computer Mkt</span>
             </div>
           </div>
 
-          <!-- Action for Police / Banks -->
-          <div class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1.5">
-            <div class="text-xs font-bold text-rose-300 flex items-center gap-1.5">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-rose-400"></i>
-              Action Protocol for Police:
+          <!-- Specific Field Instructions -->
+          <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-2">
+            <div class="text-xs font-bold text-rose-300 flex items-center gap-1.5 uppercase tracking-wider">
+              <i data-lucide="shield" class="w-4 h-4 text-rose-400"></i>
+              Action Protocol for Beat Staff:
             </div>
             <p id="insp-sop" class="text-xs text-rose-200/90 leading-relaxed">
-              Deploy plainclothes static unit for Shift Alpha (14:00 - 22:00 IST). Monitor ATM vestibules discretely for multi-card cash sweeps.
+              Deploy plainclothes static unit at Nehru Place Metro Gate 2. Observe ATM vestibules discretely for individuals conducting repeated multi-card cash sweeps. Alert bank security guards.
             </p>
           </div>
 
-          <!-- Copy Action Button -->
-          <button onclick="copyPoliceBriefing()" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all flex items-center justify-center gap-2 group">
-            <i data-lucide="copy" class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform"></i>
-            <span>Copy Police Dispatch Briefing</span>
+          <!-- 1-Click Copy Duty Order -->
+          <button onclick="copyPoliceBriefing()" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Copy Dispatch Order for Wireless / WhatsApp</span>
           </button>
 
         </div>
@@ -390,116 +349,99 @@
 
     </section>
 
-    <!-- ==================== SECTION 2: HIGH-RISK HOTSPOTS DIRECTORY ==================== -->
-    <section id="hotspots-section" class="space-y-6">
+    <!-- ==================== SECTION 2: TODAY'S PATROL DEPLOYMENT ROSTER ==================== -->
+    <section id="patrol-roster" class="space-y-6">
       
-      <div>
-        <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-1">
-          <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i>
-          Priority Dispatch List
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+            <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+            Daily Patrol Duty Chart
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Top High-Risk ATM Clusters Directory</h2>
+          <p class="text-sm text-slate-400 mt-1 max-w-2xl">
+            Ranked list of vulnerable ATM sectors requiring active physical police monitoring. Use search to find specific police station jurisdictions or areas.
+          </p>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">High-Risk ATM Quadrants Directory</h2>
-        <p class="text-sm text-slate-400 mt-1 max-w-2xl">
-          Complete rank-ordered directory of high-risk ATM clusters. Use the search bar to locate specific sectors or click "Focus on Map" to navigate directly.
-        </p>
+
+        <!-- Quick Filter -->
+        <div class="flex items-center gap-2">
+          <button class="filter-chip px-3.5 py-1.5 rounded-lg font-bold bg-blue-600/20 border border-blue-500 text-blue-300 transition-all active text-xs" data-filter="ALL">
+            All 10 Priority Hubs
+          </button>
+          <button class="filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-brand-surface border border-brand-border text-slate-400 hover:text-white transition-all text-xs" data-filter="CRITICAL">
+            Critical Risk Only
+          </button>
+        </div>
       </div>
 
-      <!-- Table Container Card -->
+      <!-- Roster Card Table -->
       <div class="bg-brand-surface rounded-2xl border border-brand-border overflow-hidden shadow-xl">
         
-        <!-- Search and Filter Bar -->
-        <div class="p-4 border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          
-          <!-- Search Box -->
-          <div class="relative w-full sm:w-80">
+        <!-- Search Bar -->
+        <div class="p-4 border-b border-brand-border flex items-center justify-between gap-4">
+          <div class="relative w-full sm:w-96">
             <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" id="table-search" placeholder="Search by area (e.g. Connaught, Saket, Kalkaji)..." class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-brand-base border border-brand-border text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all text-xs">
           </div>
-
-          <!-- Filter Chips -->
-          <div class="flex items-center gap-2 flex-wrap w-full sm:w-auto">
-            <button class="filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-cyan-500/15 border border-cyan-500 text-cyan-300 transition-all active text-xs" data-filter="ALL">
-              All Sectors (<span id="cnt-all">400</span>)
-            </button>
-            <button class="filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-brand-base border border-brand-border text-slate-400 hover:text-white transition-all text-xs" data-filter="CRITICAL">
-              Critical Risk (<span id="cnt-crit">24</span>)
-            </button>
-            <button class="filter-chip px-3.5 py-1.5 rounded-lg font-semibold bg-brand-base border border-brand-border text-slate-400 hover:text-white transition-all text-xs" data-filter="ELEVATED">
-              Elevated Risk (<span id="cnt-elev">48</span>)
-            </button>
-          </div>
-
+          <span class="text-xs text-slate-400 hidden sm:inline-block">Click 'Focus on Map' to navigate to any sector</span>
         </div>
 
-        <!-- Table Viewport -->
+        <!-- The Duty Table -->
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
-            <thead class="bg-brand-base text-slate-400 font-semibold uppercase text-[11px] border-b border-brand-border tracking-wider">
+            <thead class="bg-brand-base text-slate-400 font-bold uppercase text-[11px] border-b border-brand-border tracking-wider">
               <tr>
                 <th class="py-3.5 px-4">Priority</th>
                 <th class="py-3.5 px-4">Location / Area Name</th>
-                <th class="py-3.5 px-4">Sector ID</th>
-                <th class="py-3.5 px-4">Risk Probability</th>
-                <th class="py-3.5 px-4">Expected Cashouts</th>
-                <th class="py-3.5 px-4">ATM Kiosks</th>
-                <th class="py-3.5 px-4">Risk Level</th>
+                <th class="py-3.5 px-4">Police Station</th>
+                <th class="py-3.5 px-4">ATMs in Sector</th>
+                <th class="py-3.5 px-4">Withdrawal Probability</th>
+                <th class="py-3.5 px-4">Assigned Shift</th>
+                <th class="py-3.5 px-4">Patrol Strategy</th>
                 <th class="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody id="hotspots-tbody" class="divide-y divide-brand-border">
-              <!-- Dynamically Populated by app.js -->
+              <!-- Populated by app.js -->
             </tbody>
           </table>
-        </div>
-
-        <!-- Pagination Controls -->
-        <div class="p-4 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <span id="pagination-summary">Showing 1 to 10 of 400 sectors</span>
-          <div class="flex items-center gap-2">
-            <button id="btn-prev-page" onclick="changePage(-1)" class="px-3 py-1.5 rounded-lg bg-brand-base hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-brand-border text-slate-200 transition-all font-medium">
-              &larr; Previous
-            </button>
-            <div id="page-numbers-container" class="flex items-center gap-1"></div>
-            <button id="btn-next-page" onclick="changePage(1)" class="px-3 py-1.5 rounded-lg bg-brand-base hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-brand-border text-slate-200 transition-all font-medium">
-              Next &rarr;
-            </button>
-          </div>
         </div>
 
       </div>
 
     </section>
 
-    <!-- ==================== SECTION 3: PRACTICAL INCIDENT RISK CHECKER ==================== -->
-    <section id="checker-section" class="space-y-6">
+    <!-- ==================== SECTION 3: 1930 FRAUD COMPLAINT CASH-OUT TRACKER ==================== -->
+    <section id="fraud-tracker" class="space-y-6">
       
       <div>
-        <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">
-          <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
-          Practical Investigation Tool
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          Helpline 1930 Real-Time Response
         </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Cybercrime Report Incident Risk Checker</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">1930 Fraud Complaint Cash-Out Tracker</h2>
         <p class="text-sm text-slate-400 mt-1 max-w-2xl">
-          Received a cyber fraud complaint on Helpline 1930? Enter victim report details below to calculate the expected mule cash-out delay and identify the most likely ATM withdrawal clusters.
+          When a cybercrime victim reports an incident on Helpline 1930, enter the complaint details below to calculate the expected physical cash-out extraction window and identify target ATM hubs.
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- Form Inputs (5 cols) -->
+        <!-- Input Form (5 cols) -->
         <div class="lg:col-span-5 bg-brand-surface rounded-2xl border border-brand-border p-6 shadow-xl space-y-5">
           <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i data-lucide="file-input" class="w-4 h-4 text-cyan-400"></i>
-            Victim Incident Details
+            <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
+            Victim Complaint Details
           </h3>
 
           <!-- Scam Category -->
           <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-300">Type of Cyber Fraud Scam:</label>
+            <label class="text-xs font-bold text-slate-300">Modus Operandi / Scam Type:</label>
             <select id="sim-category" class="w-full bg-brand-base border border-brand-border text-slate-200 text-xs rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500">
-              <option value="Investment Scam">Stock / Investment Scam (High Value)</option>
-              <option value="UPI Phishing">UPI Payment Gateway / QR Phishing</option>
-              <option value="Part-time Job Scam">Telegram / Work-From-Home Task Scam</option>
+              <option value="UPI Phishing">UPI Payment Gateway / QR Code Phishing</option>
+              <option value="Investment Scam">Stock / Investment Trading Scam (High Value)</option>
+              <option value="Part-time Job Scam">Telegram Task / Work-From-Home Scam</option>
               <option value="Loan App Extortion">Illegal Digital Lending App Extortion</option>
               <option value="ATM / Card Skimming">ATM Card Skimming / PoS Cloning</option>
             </select>
@@ -507,9 +449,9 @@
 
           <!-- Stolen Amount Slider -->
           <div class="space-y-2">
-            <div class="flex justify-between text-xs font-semibold">
+            <div class="flex justify-between text-xs font-bold">
               <span class="text-slate-300">Reported Fraud Amount:</span>
-              <span id="lbl-sim-loss" class="font-mono text-cyan-400 font-bold">&#8377;50,000</span>
+              <span id="lbl-sim-loss" class="font-mono text-cyan-400">&#8377;50,000</span>
             </div>
             <input type="range" id="sim-loss" min="10000" max="300000" value="50000" step="10000" class="w-full accent-cyan-400 bg-brand-base rounded-lg h-2 cursor-pointer">
             <div class="flex justify-between text-[11px] text-slate-500 font-mono">
@@ -519,21 +461,20 @@
             </div>
           </div>
 
-          <!-- Time Reported -->
+          <!-- Time Elapsed -->
           <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-300">When was the fraud reported?</label>
+            <label class="text-xs font-bold text-slate-300">Time Elapsed Since Transaction:</label>
             <select id="sim-time" class="w-full bg-brand-base border border-brand-border text-slate-200 text-xs rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500">
-              <option value="0">Just now (&lt; 30 minutes ago)</option>
-              <option value="2">2 Hours ago</option>
-              <option value="4">4 Hours ago</option>
-              <option value="8">8 Hours ago (Layering in progress)</option>
+              <option value="0">Reported immediately (&lt; 30 minutes)</option>
+              <option value="2">Reported 2 hours ago (Mule layering active)</option>
+              <option value="4">Reported 4 hours ago (Imminent cashout)</option>
             </select>
           </div>
 
           <!-- Submit Button -->
           <button id="btn-run-sim" class="w-full py-3 px-4 rounded-xl text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
-            <i data-lucide="zap" class="w-4 h-4"></i>
-            <span>Calculate Cash-Out Window &amp; Hotspots</span>
+            <i data-lucide="crosshair" class="w-4 h-4"></i>
+            <span>Calculate Cash-Out Window &amp; Target Sector</span>
           </button>
         </div>
 
@@ -543,54 +484,54 @@
           <!-- Banner Result -->
           <div id="sim-alert-box" class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-start gap-3">
             <div class="text-cyan-400 mt-0.5">
-              <i data-lucide="radar" class="w-5 h-5"></i>
+              <i data-lucide="radio" class="w-5 h-5"></i>
             </div>
             <div>
-              <h4 id="sim-alert-title" class="text-sm font-bold text-white">Incident Assessment Generated</h4>
+              <h4 id="sim-alert-title" class="text-sm font-bold text-white">Target Identified: Nehru Place Commercial Hub</h4>
               <p id="sim-alert-desc" class="text-xs text-slate-300 mt-1 leading-relaxed">
-                Based on historical money mule cash-out telemetry in Delhi NCR, funds are layered through 2-3 intermediary accounts before physical ATM extraction.
+                Money mule cashout expected at ATM vestibules in <strong>PS Kalkaji</strong> jurisdiction in approximately <strong>2.5 hours</strong>.
               </p>
             </div>
           </div>
 
-          <!-- 3 Quick Metrics -->
+          <!-- Quick Numbers -->
           <div class="grid grid-cols-3 gap-3">
             <div class="p-3.5 rounded-xl bg-brand-base border border-brand-border text-center">
               <div class="text-[11px] font-medium text-slate-400 mb-1">Expected Cashout Window</div>
-              <div id="sm-window" class="text-lg font-bold text-amber-400 font-mono">+3.5 Hours</div>
+              <div id="sm-window" class="text-lg font-bold text-amber-400 font-mono">+2.5 Hours</div>
               <div class="text-[10px] text-slate-500 mt-0.5">Peak vulnerability</div>
             </div>
             <div class="p-3.5 rounded-xl bg-brand-base border border-brand-border text-center">
-              <div class="text-[11px] font-medium text-slate-400 mb-1">Target Corridor</div>
+              <div class="text-[11px] font-medium text-slate-400 mb-1">Primary Target Corridor</div>
               <div id="sm-hub" class="text-lg font-bold text-rose-400 font-mono truncate">Nehru Place Hub</div>
-              <div class="text-[10px] text-slate-500 mt-0.5">Top probability cell</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">PS Kalkaji / PS Nehru Place</div>
             </div>
             <div class="p-3.5 rounded-xl bg-brand-base border border-brand-border text-center">
-              <div class="text-[11px] font-medium text-slate-400 mb-1">Interception Window</div>
-              <div id="sm-urgency" class="text-lg font-bold text-emerald-400 font-mono">Immediate</div>
-              <div class="text-[10px] text-slate-500 mt-0.5">Before ATM sweep</div>
+              <div class="text-[11px] font-medium text-slate-400 mb-1">Action Urgency</div>
+              <div id="sm-urgency" class="text-lg font-bold text-emerald-400 font-mono">Immediate Alert</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Deploy beat patrol</div>
             </div>
           </div>
 
-          <!-- Practical Action Protocol -->
+          <!-- Police Immediate Action Steps -->
           <div class="space-y-3">
             <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i>
-              Action Checklist for Police &amp; Bank Nodal Officers:
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              Immediate Action Steps for Duty Officer:
             </h4>
             
             <div class="space-y-2 text-xs">
               <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-brand-base border border-brand-border">
                 <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px] mt-0.5 shrink-0">1</span>
-                <span class="text-slate-300"><strong>Alert Bank Nodal Officers:</strong> Freeze mule accounts and enforce temporary withdrawal caps (INR 10,000) on non-home debit cards.</span>
+                <span class="text-slate-300"><strong>Flash Alert to Beat Staff:</strong> Inform motorcycle patrol unit covering Nehru Place Metro &amp; Computer Market to monitor ATM kiosks.</span>
               </div>
               <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-brand-base border border-brand-border">
                 <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px] mt-0.5 shrink-0">2</span>
-                <span class="text-slate-300"><strong>Deploy Beat Officers:</strong> Position plainclothes personnel at high-density ATM vestibules near Nehru Place and Connaught Place metro stations.</span>
+                <span class="text-slate-300"><strong>Notify Bank Nodal Officers:</strong> Send formal request to acquiring banks to freeze suspicious multi-card withdrawals over INR 10,000.</span>
               </div>
               <div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-brand-base border border-brand-border">
                 <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px] mt-0.5 shrink-0">3</span>
-                <span class="text-slate-300"><strong>Preserve Video Evidence:</strong> Issue CCTV preservation notices to acquiring banks for footage captured during the predicted cash-out window.</span>
+                <span class="text-slate-300"><strong>CCTV Preservation:</strong> Issue notice to bank branch managers to preserve ATM camera footage for the next 48 hours.</span>
               </div>
             </div>
           </div>
@@ -601,263 +542,78 @@
 
     </section>
 
-    <!-- ==================== SECTION 4: HOW THE AI WORKS & TECHNICAL PROOF ==================== -->
-    <section id="how-it-works" class="space-y-6">
+    <!-- ==================== SECTION 4: DOWNLOAD DUTY SHEETS & REPORTS ==================== -->
+    <section id="duty-downloads" class="space-y-6">
       
       <div>
-        <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">
-          <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-          Architecture &amp; Methodology
-        </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">How CyberWatch Forecasts Cash Withdrawals</h2>
-        <p class="text-sm text-slate-400 mt-1 max-w-2xl">
-          A 3-stage spatiotemporal machine learning system trained on historical cybercrime complaints, spatial ATM densities, and money mule transit patterns.
-        </p>
-      </div>
-
-      <!-- 3-Step Simple Explanation Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <div class="p-6 rounded-2xl bg-brand-surface border border-brand-border space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold">
-            1
-          </div>
-          <h3 class="text-base font-bold text-white">1930 Cybercrime Telemetry</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Ingests real-time complaint data from the National Cybercrime Reporting Portal (NCRP / 1930) and extracts scam category, amount, and initial transaction timestamps.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-brand-surface border border-brand-border space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
-            2
-          </div>
-          <h3 class="text-base font-bold text-white">Spatiotemporal AI Models</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            A Champion Stacked Ensemble of Gradient Boosted Decision Trees and calibrated probability estimators forecasts withdrawal likelihood across 400 discrete 1km x 1km quadrants.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-brand-surface border border-brand-border space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
-            3
-          </div>
-          <h3 class="text-base font-bold text-white">Tactical Patrol Dispatch</h3>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            Law enforcement receives ranked priority sectors, optimal patrol shift windows (e.g. 14:00 - 22:00), and automated legal documentation for bank CCTV preservation.
-          </p>
-        </div>
-
-      </div>
-
-      <!-- Collapsible Technical Benchmarks Section (For Evaluators & Judges) -->
-      <div class="bg-brand-surface rounded-2xl border border-brand-border overflow-hidden shadow-xl">
-        
-        <div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brand-border">
-          <div>
-            <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <i data-lucide="bar-chart-2" class="w-5 h-5 text-cyan-400"></i>
-              Model Benchmark Proofs &amp; Diagnostic Curves
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              Rigorous walk-forward validation over 18,400 holdout observations across 46 rolling time horizons.
-            </p>
-          </div>
-          <button id="btn-toggle-benchmarks" onclick="toggleBenchmarks()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-base hover:bg-slate-800 text-slate-200 border border-brand-border transition-all flex items-center gap-2 shrink-0">
-            <span id="lbl-benchmarks-toggle">Show Technical ML Details</span>
-            <i data-lucide="chevron-down" id="icon-benchmarks-toggle" class="w-4 h-4 text-cyan-400 transition-transform"></i>
-          </button>
-        </div>
-
-        <!-- Collapsible Container (Hidden by default) -->
-        <div id="benchmarks-container" class="hidden p-6 space-y-6">
-          
-          <!-- 9-Model Benchmark Table -->
-          <div>
-            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">9-Model Walk-Forward Comparison</h4>
-            <div class="overflow-x-auto rounded-xl border border-brand-border">
-              <table class="w-full text-left border-collapse text-xs">
-                <thead class="bg-brand-base font-mono text-slate-400 uppercase text-[11px] border-b border-brand-border tracking-wider">
-                  <tr>
-                    <th class="py-3 px-4">Model Architecture</th>
-                    <th class="py-3 px-4">Class</th>
-                    <th class="py-3 px-4">ROC-AUC</th>
-                    <th class="py-3 px-4">PR-AUC</th>
-                    <th class="py-3 px-4">PAI@10</th>
-                    <th class="py-3 px-4">PEI@10</th>
-                    <th class="py-3 px-4">Brier Score</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-brand-border">
-                  <tr class="hover:bg-slate-900/40">
-                    <td class="py-2.5 px-4 font-semibold text-slate-300">Uniform Random Baseline</td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Naive</span></td>
-                    <td class="py-2.5 px-4 font-mono">0.5000</td>
-                    <td class="py-2.5 px-4 font-mono">0.0500</td>
-                    <td class="py-2.5 px-4 font-mono">0.97</td>
-                    <td class="py-2.5 px-4 font-mono">0.070</td>
-                    <td class="py-2.5 px-4 font-mono">0.2500</td>
-                  </tr>
-                  <tr class="hover:bg-slate-900/40">
-                    <td class="py-2.5 px-4 font-semibold text-slate-300">Persistent Lag (Yesterday)</td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">Baseline</span></td>
-                    <td class="py-2.5 px-4 font-mono">0.7712</td>
-                    <td class="py-2.5 px-4 font-mono">0.2334</td>
-                    <td class="py-2.5 px-4 font-mono">6.52</td>
-                    <td class="py-2.5 px-4 font-mono">0.488</td>
-                    <td class="py-2.5 px-4 font-mono">0.0950</td>
-                  </tr>
-                  <tr class="hover:bg-slate-900/40">
-                    <td class="py-2.5 px-4 font-semibold text-slate-300">Poisson GLM Regressor</td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">GLM</span></td>
-                    <td class="py-2.5 px-4 font-mono">0.8864</td>
-                    <td class="py-2.5 px-4 font-mono">0.4837</td>
-                    <td class="py-2.5 px-4 font-mono">8.62</td>
-                    <td class="py-2.5 px-4 font-mono">0.641</td>
-                    <td class="py-2.5 px-4 font-mono">0.0475</td>
-                  </tr>
-                  <tr class="hover:bg-slate-900/40">
-                    <td class="py-2.5 px-4 font-semibold text-slate-300">Random Forest Classifier</td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">Ensemble</span></td>
-                    <td class="py-2.5 px-4 font-mono">0.8752</td>
-                    <td class="py-2.5 px-4 font-mono">0.4211</td>
-                    <td class="py-2.5 px-4 font-mono">8.04</td>
-                    <td class="py-2.5 px-4 font-mono">0.601</td>
-                    <td class="py-2.5 px-4 font-mono">0.0512</td>
-                  </tr>
-                  <tr class="hover:bg-slate-900/40">
-                    <td class="py-2.5 px-4 font-semibold text-slate-300">HistGradientBoosting (GBDT)</td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300">Boosting</span></td>
-                    <td class="py-2.5 px-4 font-mono">0.8878</td>
-                    <td class="py-2.5 px-4 font-mono">0.4692</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-emerald-400">8.81</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-indigo-400">0.656</td>
-                    <td class="py-2.5 px-4 font-mono">0.1040</td>
-                  </tr>
-                  <tr class="bg-cyan-500/10 border-l-4 border-cyan-400">
-                    <td class="py-2.5 px-4 font-bold text-white flex items-center gap-1.5">
-                      <i data-lucide="award" class="w-4 h-4 text-cyan-400"></i>
-                      Champion Stacked Classifier
-                    </td>
-                    <td class="py-2.5 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-500 font-bold">Champion</span></td>
-                    <td class="py-2.5 px-4 font-mono font-extrabold text-emerald-400">0.9348</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-cyan-400">0.4785</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-emerald-400">8.54</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-indigo-400">0.635</td>
-                    <td class="py-2.5 px-4 font-mono font-bold text-amber-400">0.0385</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Diagnostic Plots Gallery -->
-          <div>
-            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Diagnostic Performance Plots</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
-              <!-- Plot 1 -->
-              <div class="rounded-xl border border-brand-border bg-brand-base overflow-hidden p-3 space-y-2">
-                <img src="model_performance_charts.png" alt="ROC & Calibration Plots" class="w-full h-48 object-cover rounded-lg cursor-zoom-in hover:opacity-90 transition-opacity" onclick="openLightbox('model_performance_charts.png')">
-                <div class="text-xs font-bold text-white">ROC &amp; Calibration Curves</div>
-                <div class="text-[11px] text-slate-400 leading-tight">ROC-AUC 0.9348 &bull; Isotonic Brier Error Reduction -64.4%</div>
-              </div>
-
-              <!-- Plot 2 -->
-              <div class="rounded-xl border border-brand-border bg-brand-base overflow-hidden p-3 space-y-2">
-                <img src="advanced_diagnostic_curves.png" alt="Cost Utility Curve" class="w-full h-48 object-cover rounded-lg cursor-zoom-in hover:opacity-90 transition-opacity" onclick="openLightbox('advanced_diagnostic_curves.png')">
-                <div class="text-xs font-bold text-white">Cost-Utility Optimization</div>
-                <div class="text-[11px] text-slate-400 leading-tight">&#8377;2.92 Crore recovered at threshold &tau;* = 0.05</div>
-              </div>
-
-              <!-- Plot 3 -->
-              <div class="rounded-xl border border-brand-border bg-brand-base overflow-hidden p-3 space-y-2">
-                <img src="esda_spatial_clusters.png" alt="Spatial ESDA Moran's I" class="w-full h-48 object-cover rounded-lg cursor-zoom-in hover:opacity-90 transition-opacity" onclick="openLightbox('esda_spatial_clusters.png')">
-                <div class="text-xs font-bold text-white">Spatial Clustering (Moran's I)</div>
-                <div class="text-[11px] text-slate-400 leading-tight">Moran's I = +0.6018 (p &lt; 0.0001) proves non-random mule clustering</div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- ==================== SECTION 5: DOWNLOADS & REPORTS ==================== -->
-    <section id="downloads-section" class="space-y-6">
-      
-      <div>
-        <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-400 uppercase tracking-wider mb-1">
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-400 uppercase tracking-wider mb-1">
           <i data-lucide="download" class="w-3.5 h-3.5"></i>
-          Project Deliverables
+          Duty Roster Downloads
         </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Downloads &amp; Intelligence Reports</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Download Patrol Sheets &amp; Operations Packages</h2>
         <p class="text-sm text-slate-400 mt-1 max-w-2xl">
-          Direct 1-click access to the complete academic thesis, tactical patrol CSV packages, and standard GIS GeoJSON map files.
+          Direct downloads of today's patrol allocation rosters, target ATM coordinates for mobile mapping, and CCTV preservation notice templates.
         </p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- File 1: Thesis PDF -->
-        <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
+        <!-- Sheet 1: Patrol Roster CSV -->
+        <a href="reports/tactical_exports/priority_matrix_top20.csv" download="delhi_police_patrol_roster_today.csv" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-cyan-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
           <div class="space-y-2">
             <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
-              <i data-lucide="file-text" class="w-5 h-5"></i>
+              <i data-lucide="clipboard-check" class="w-5 h-5"></i>
             </div>
-            <h4 class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">Final Capstone Thesis Report</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">Complete technical paper detailing mathematical proofs, walk-forward CV, and empirical benchmarks.</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">Daily Patrol Roster (CSV)</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Shift-wise police deployment table with station jurisdictions, officer counts, and target hours.</p>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-semibold text-cyan-400">
-            <span>Download PDF</span>
+          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-bold text-cyan-400">
+            <span>Download CSV Roster</span>
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </div>
         </a>
 
-        <!-- File 2: Priority CSV -->
-        <a href="data/forecasts.json" download="delhi_ncr_hotspots_latest.json" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-emerald-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
+        <!-- Sheet 2: Target ATM Directory -->
+        <a href="data/forecasts.json" download="delhi_target_atms_today.json" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-emerald-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
           <div class="space-y-2">
             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-              <i data-lucide="table" class="w-5 h-5"></i>
+              <i data-lucide="database" class="w-5 h-5"></i>
             </div>
-            <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">Operational Hotspots JSON</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">Full 400-quadrant forecast surface with conformal uncertainty bounds and ATM counts.</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">Target ATMs Directory (JSON)</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Complete coordinate list of all vulnerable ATM clusters in Delhi NCR for control room systems.</p>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-semibold text-emerald-400">
-            <span>Download JSON</span>
+          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-bold text-emerald-400">
+            <span>Download ATM Data</span>
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </div>
         </a>
 
-        <!-- File 3: GeoJSON -->
-        <a href="reports/tactical_exports/delhi_atm_hotspots.geojson" download="delhi_atm_hotspots.geojson" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-indigo-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
+        <!-- Sheet 3: GIS Map Layer -->
+        <a href="reports/tactical_exports/delhi_atm_hotspots.geojson" download="delhi_atm_hotspots_map.geojson" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-indigo-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
           <div class="space-y-2">
             <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
-              <i data-lucide="map-pin" class="w-5 h-5"></i>
+              <i data-lucide="map" class="w-5 h-5"></i>
             </div>
-            <h4 class="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">Geospatial Grid GeoJSON</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">Standard GeoJSON polygon layer ready to import into ArcGIS, QGIS, or police control rooms.</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">GIS Control Room Map (GeoJSON)</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Standard GIS layer compatible with Delhi Police Master Control Room dispatch displays.</p>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-semibold text-indigo-400">
+          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-bold text-indigo-400">
             <span>Download GeoJSON</span>
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </div>
         </a>
 
-        <!-- File 4: Patrol Roster CSV -->
-        <a href="reports/tactical_exports/priority_matrix_top20.csv" download="delhi_patrol_allocation_top20.csv" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
+        <!-- Sheet 4: Full System Operations Manual -->
+        <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all group flex flex-col justify-between space-y-4">
           <div class="space-y-2">
             <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-              <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+              <i data-lucide="book-open" class="w-5 h-5"></i>
             </div>
-            <h4 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Top 20 Patrol Roster CSV</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">Pre-assigned police shift allocations, officer requirements, and tactical action instructions.</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Operations Manual &amp; SOP (PDF)</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">Standard operating procedures, CCTV notice formats, and inter-agency coordination protocol.</p>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-semibold text-amber-400">
-            <span>Download CSV</span>
+          <div class="flex items-center justify-between pt-2 border-t border-brand-border text-xs font-bold text-amber-400">
+            <span>View Manual (PDF)</span>
             <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
           </div>
         </a>
@@ -868,30 +624,20 @@
 
   </main>
 
-  <!-- ==================== 6. CLEAN FOOTER ==================== -->
-  <footer class="border-t border-brand-border bg-brand-surface/40 py-10 mt-16 text-xs text-slate-400">
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-brand-border bg-brand-surface/40 py-8 mt-16 text-xs text-slate-400">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+        <div class="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
           <i data-lucide="shield" class="w-4 h-4"></i>
         </div>
-        <span><strong>CyberWatch</strong> &bull; SIH26184 Capstone Project</span>
+        <span><strong>CyberWatch</strong> &bull; Delhi Police Cybercrime ATM Interdiction System</span>
       </div>
       <div>
-        <span>Built for Smart India Hackathon &bull; Open-source on <a href="https://github.com/harshabacham/new" target="_blank" class="text-cyan-400 hover:underline">GitHub</a></span>
+        <span>Dedicated Law Enforcement Decision Support Portal &bull; SIH26184</span>
       </div>
     </div>
   </footer>
-
-  <!-- Lightbox Modal for Diagnostic Images -->
-  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
-    <div class="relative max-w-5xl max-h-[90vh] bg-slate-900 rounded-2xl border border-slate-700 p-2 overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-      <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-slate-800 text-slate-200 hover:text-white hover:bg-slate-700 transition-all">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <img id="lightbox-img" src="" alt="Expanded Diagnostic View" class="w-full max-h-[85vh] object-contain rounded-xl">
-    </div>
-  </div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
