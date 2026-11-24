@@ -1,10 +1,11 @@
-# Ignore Python runtime files and heavy ML artifacts from Vercel deployment
-# This guarantees Vercel deploys 100% pure static edge assets without building failing serverless functions
+# Exclude Python runtime files, dependencies, and project configs from Vercel deployment
+# This guarantees Vercel deploys 100% pure static web assets without triggering Python build runners
 *.py
 *.bat
 *.ipynb
 *.parquet
 requirements.txt
+pyproject.toml
 Dockerfile
 docker-compose.yml
 models/
