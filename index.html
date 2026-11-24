@@ -3,228 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBERWATCH // SIH26184 - Cybercrime Cash-Withdrawal Location Forecasting</title>
-  <!-- Google Fonts -->
+  <title>CYBERWATCH // SIH26184 - Cybercrime Cash-Withdrawal Location Forecasting Command Center</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Leaflet GIS CSS (Reliable CDN) -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet GIS CSS (Cloudflare cdnjs) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  <!-- Custom Stylesheet -->
+  <!-- Custom Modern Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark-theme">
-  <!-- Top Navigation Bar -->
+<body>
+
+  <!-- 1. TOP GLOBAL COMMAND NAVBAR -->
   <header class="navbar">
-    <div class="nav-container">
-      <div class="brand">
-        <span class="brand-icon">🛡️</span>
-        <div class="brand-text">
-          <span class="brand-title">CYBERWATCH <span class="highlight">// SIH26184</span></span>
-          <span class="brand-subtitle">Cybercrime Cash-Withdrawal Forecasting Platform</span>
-        </div>
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#gis-panel" class="brand-wrapper">
+          <div class="brand-shield">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="brand-title">
+            CYBERWATCH <span class="tag">// SIH26184</span>
+          </div>
+        </a>
+        <span class="live-badge">
+          <span class="pulse-dot"></span>
+          LIVE TELEMETRY (13/13 QA PASS)
+        </span>
       </div>
-      <nav class="nav-links">
-        <a href="#overview" class="nav-link active">Overview</a>
-        <a href="#gis-map" class="nav-link">GIS Hotspots</a>
-        <a href="#tactical-matrix" class="nav-link">Priority Matrix</a>
-        <a href="#ml-diagnostics" class="nav-link">ML Benchmarks</a>
-        <a href="#simulator" class="nav-link">1930 Simulator</a>
-        <a href="#dispatch" class="nav-link">Dispatch SOPs</a>
-        <a href="#governance" class="nav-link">Governance</a>
+
+      <!-- Center Segmented View Switcher -->
+      <nav class="nav-tabs" id="main-view-tabs">
+        <button class="nav-tab-btn active" data-target="panel-gis">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+          Geospatial Deck
+        </button>
+        <button class="nav-tab-btn" data-target="panel-matrix">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+          Priority Matrix
+        </button>
+        <button class="nav-tab-btn" data-target="panel-diagnostics">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          ML Diagnostics
+        </button>
+        <button class="nav-tab-btn" data-target="panel-simulator">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          1930 Incident Radar
+        </button>
+        <button class="nav-tab-btn" data-target="panel-dispatch">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Dispatch SOPs
+        </button>
       </nav>
-      <div class="nav-actions">
-        <span class="status-badge pulse"><span class="dot"></span> SYSTEM ONLINE (13/13 QA PASS)</span>
-        <a href="https://github.com/harshabacham/new" target="_blank" class="btn btn-outline btn-sm">GitHub Repo ↗</a>
+
+      <!-- Right Utility Actions -->
+      <div class="nav-right">
+        <span class="clock-ticker" id="live-ist-clock">IST: --:--:--</span>
+        <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="hud-pill">
+          Thesis PDF ↗
+        </a>
+        <a href="https://github.com/harshabacham/new" target="_blank" class="hud-pill active">
+          GitHub ↗
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section id="overview" class="hero-section">
+  <!-- 2. HIGH-DENSITY TACTICAL SUMMARY STRIP (Above the fold) -->
+  <section class="tactical-summary-strip">
     <div class="container">
-      <div class="hero-badge">Smart India Hackathon 2026 | Academic Track B.Tech AI/ML Capstone</div>
-      <h1 class="hero-title">
-        Forecasting Cybercrime ATM Cash-Out Hotspots with <span class="gradient-text">Supervised Machine Learning</span>
-      </h1>
-      <p class="hero-description">
-        Bridging digital financial fraud telemetry from <strong>Helpline 1930 / NCRP</strong> to physical cash-dispensation interdiction. 
-        Evaluating 400 urban grid cells under strict chronological walk-forward backtesting with <strong>zero lookahead leakage</strong>.
-      </p>
-      <div class="hero-actions">
-        <a href="#gis-map" class="btn btn-primary">🗺️ Explore Interactive GIS Map</a>
-        <a href="#simulator" class="btn btn-secondary">⚡ Test Live 1930 Burst Simulator</a>
-        <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="btn btn-outline">📄 Master Capstone Thesis (PDF)</a>
-      </div>
+      <div class="kpi-ribbon">
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Champion ROC-AUC</span>
+            <span class="kpi-icon" style="color: var(--cyan);">🏆</span>
+          </div>
+          <div class="kpi-num" style="color: var(--cyan);">0.9348</div>
+          <div class="kpi-delta">Walk-forward Stacked Ensemble</div>
+        </div>
 
-      <!-- KPI Metrics Grid -->
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">Champion Stacked ROC-AUC</div>
-          <div class="kpi-value text-cyan">0.9348</div>
-          <div class="kpi-sub">Multi-model tree & linear meta-learner</div>
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Spatial Concentration (PAI@10)</span>
+            <span class="kpi-icon" style="color: var(--emerald);">🎯</span>
+          </div>
+          <div class="kpi-num" style="color: var(--emerald);">8.81x</div>
+          <div class="kpi-delta">9.1x superior vs Uniform Random</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Spatial Concentration (PAI@10)</div>
-          <div class="kpi-value text-emerald">8.81x</div>
-          <div class="kpi-sub">9.1x higher capture rate vs random</div>
+
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Oracle Efficiency (PEI@10)</span>
+            <span class="kpi-icon" style="color: var(--indigo);">⚡</span>
+          </div>
+          <div class="kpi-num" style="color: var(--indigo);">65.6%</div>
+          <div class="kpi-delta">Theoretical upper-bound capture</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Oracle Efficiency (PEI@10)</div>
-          <div class="kpi-value text-indigo">65.6%</div>
-          <div class="kpi-sub">Percentage of theoretical maximum</div>
+
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Isotonic Brier Loss</span>
+            <span class="kpi-icon" style="color: var(--amber);">📉</span>
+          </div>
+          <div class="kpi-num" style="color: var(--amber);">0.0370</div>
+          <div class="kpi-delta">-64.4% probability error reduction</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Isotonic Brier Score</div>
-          <div class="kpi-value text-amber">0.0370</div>
-          <div class="kpi-sub">-64.4% probability error reduction</div>
+
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Net Operational Utility</span>
+            <span class="kpi-icon" style="color: var(--rose);">💰</span>
+          </div>
+          <div class="kpi-num" style="color: var(--rose);">₹29.21M</div>
+          <div class="kpi-delta">Asymmetric cost cutoff τ* = 0.05</div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Net Operational Utility</div>
-          <div class="kpi-value text-rose">₹29.21M</div>
-          <div class="kpi-sub">Optimized cutoff at τ* = 0.05</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Statutory Compliance</div>
-          <div class="kpi-value text-blue">DPDP 2023</div>
-          <div class="kpi-sub">Zero PII | 1km k-Anonymity Grid</div>
+
+        <div class="kpi-tile">
+          <div class="kpi-top">
+            <span class="kpi-title">Statutory Compliance</span>
+            <span class="kpi-icon" style="color: var(--purple);">🛡️</span>
+          </div>
+          <div class="kpi-num" style="color: var(--purple);">DPDP '23</div>
+          <div class="kpi-delta">Zero PII | 1km k-Anonymity Grid</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive GIS Map Section -->
-  <section id="gis-map" class="section">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Geospatial Intelligence Engine</span>
-          <h2 class="section-title">Interactive Geospatial Hotspot Forecast Surface</h2>
-          <p class="section-desc">
-            400 discrete 1km × 1km spatial quadrants over the metropolitan territory. Click any cell to inspect localized feature attributions and conformal uncertainty bands.
+  <main class="container">
+
+    <!-- ==================== PANEL 1: GEOSPATIAL INTELLIGENCE DECK ==================== -->
+    <div id="panel-gis" class="deck-panel active">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            Interactive Geospatial Cash-Out Forecast Deck
+          </h2>
+          <p>
+            Surveilling 400 discrete 1km × 1km metropolitan sectors. Click any cell to inspect localized feature attributions, conformal uncertainty bands, and plainclothes interdiction orders.
           </p>
-        </div>
-        <div class="map-controls">
-          <button id="btn-toggle-top10" class="btn btn-sm btn-active">Top-10 Targets</button>
-          <button id="btn-toggle-exploration" class="btn btn-sm btn-active">80/20 Exploration Zones</button>
-          <button id="btn-reset-view" class="btn btn-sm btn-outline">Reset View</button>
         </div>
       </div>
 
-      <div class="gis-layout">
-        <div class="map-wrapper">
-          <div id="gis-map-container" class="map-canvas"></div>
-          <div class="map-legend">
-            <span class="legend-item"><span class="legend-color legend-critical"></span> Critical Hotspot (P ≥ 90%)</span>
-            <span class="legend-item"><span class="legend-color legend-elevated"></span> Elevated (50% - 89%)</span>
-            <span class="legend-item"><span class="legend-color legend-exploration"></span> 20% Exploration Audit Zone</span>
+      <div class="gis-deck-layout">
+        <!-- Main Map Viewport Card -->
+        <div class="map-viewport-card">
+          <!-- Floating Map HUD Toolbar -->
+          <div class="map-hud-bar">
+            <div class="hud-group">
+              <span class="hud-label">Sector Focus:</span>
+              <button class="hud-pill" onclick="jumpToSector(28.535, 77.255, 13)">Central-South Hub</button>
+              <button class="hud-pill" onclick="jumpToSector(28.635, 77.215, 13)">Connaught Corridor</button>
+              <button class="hud-pill" onclick="jumpToSector(28.685, 77.265, 12)">North-East Transit</button>
+              <button class="hud-pill" onclick="jumpToSector(28.57, 77.23, 11)">Full Territory</button>
+            </div>
+
+            <div class="hud-group">
+              <span class="hud-label">Layers:</span>
+              <button id="btn-toggle-top10" class="hud-pill pill-rose active">Top-10 Hotspots</button>
+              <button id="btn-toggle-exploration" class="hud-pill pill-emerald active">20% Audit Zones</button>
+              <button id="btn-reset-map" class="hud-pill">Reset View</button>
+            </div>
+          </div>
+
+          <!-- Leaflet Canvas -->
+          <div id="gis-map-container" class="map-container"></div>
+
+          <!-- Floating Legend -->
+          <div class="map-floating-legend">
+            <div class="leg-item"><span class="leg-dot leg-rose"></span> <strong>Critical Hotspot (P ≥ 90%)</strong></div>
+            <div class="leg-item"><span class="leg-dot leg-amber"></span> <strong>Elevated Sector (50% - 89%)</strong></div>
+            <div class="leg-item"><span class="leg-dot leg-cyan"></span> <strong>20% Exploration Audit Zone</strong></div>
           </div>
         </div>
 
-        <div class="inspector-card" id="cell-inspector">
-          <div class="inspector-header">
-            <span class="inspector-badge" id="insp-tier">CRITICAL HOTSPOT</span>
-            <h3 class="inspector-title" id="insp-cell-id">CELL_03_15</h3>
-            <p class="inspector-coords" id="insp-coords">28.535°N, 77.255°E (1km × 1km Quadrant)</p>
+        <!-- Sliding Tactical Cell Inspector Panel -->
+        <aside class="inspector-panel" id="cell-inspector">
+          <div class="insp-card-header">
+            <div class="insp-top-meta">
+              <span class="insp-badge" id="insp-tier">CRITICAL HOTSPOT</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);" id="insp-rank">RANK #1</span>
+            </div>
+            <h3 class="insp-cell-name" id="insp-cell-id">CELL_03_15</h3>
+            <span class="insp-sub-coords" id="insp-coords">28.535°N, 77.255°E (1km × 1km Quadrant)</span>
           </div>
-          
-          <div class="inspector-metrics">
-            <div class="insp-metric">
-              <span class="insp-label">Forecast Probability</span>
-              <span class="insp-val text-rose" id="insp-prob">98.2%</span>
+
+          <!-- Probability & Expected Cashouts -->
+          <div class="gauge-row">
+            <div class="gauge-card">
+              <span class="gauge-label">Hotspot Probability</span>
+              <div class="gauge-val" style="color: var(--rose);" id="insp-prob">98.2%</div>
             </div>
-            <div class="insp-metric">
-              <span class="insp-label">Expected Withdrawals (24h)</span>
-              <span class="insp-val text-cyan" id="insp-count">3.1 Cash-outs</span>
-            </div>
-            <div class="insp-metric">
-              <span class="insp-label">90% Conformal Interval</span>
-              <span class="insp-val text-amber" id="insp-ci">[2.2 - 4.0]</span>
-            </div>
-            <div class="insp-metric">
-              <span class="insp-label">ATM Cluster Count</span>
-              <span class="insp-val text-emerald" id="insp-atms">10 Kiosks</span>
+            <div class="gauge-card">
+              <span class="gauge-label">Expected 24h Cashouts</span>
+              <div class="gauge-val" style="color: var(--cyan);" id="insp-count">3.1</div>
             </div>
           </div>
 
-          <div class="inspector-drivers">
-            <span class="insp-label">Explainable AI (XAI) Attribution Drivers:</span>
-            <div class="driver-tags" id="insp-drivers">
-              <span class="driver-tag">Historical Recency Momentum (30d)</span>
-              <span class="driver-tag">Weekly Repeat Withdrawal Burst</span>
-              <span class="driver-tag">High ATM Density Corridor</span>
+          <!-- Micro Details -->
+          <div class="insp-details-grid">
+            <div class="detail-item">
+              <span class="detail-label">90% Conformal Band</span>
+              <div class="detail-val" style="color: var(--amber);" id="insp-ci">[2.2 - 4.0]</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">ATM Terminal Density</span>
+              <div class="detail-val" style="color: var(--emerald);" id="insp-atms">29 Kiosks</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Transit Score</span>
+              <div class="detail-val" style="color: var(--indigo);" id="insp-transit">0.768</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Audit Safeguard</span>
+              <div class="detail-val" style="color: #cbd5e1;">Active</div>
             </div>
           </div>
 
-          <div class="inspector-action">
-            <span class="insp-label">Recommended Interdiction Directive:</span>
-            <p class="insp-sop" id="insp-sop">
+          <!-- XAI Drivers -->
+          <div class="drivers-section">
+            <span class="drivers-title">Top Explainable AI (XAI) Feature Drivers:</span>
+            <div class="tag-cloud" id="insp-drivers">
+              <span class="driver-chip">Historical Recency Momentum (30d)</span>
+              <span class="driver-chip">Weekly Repeat Withdrawal Burst</span>
+              <span class="driver-chip">High Density ATM Infrastructure</span>
+            </div>
+          </div>
+
+          <!-- Recommended SOP -->
+          <div class="directive-box">
+            <div class="directive-title">🚔 Field Interdiction Protocol:</div>
+            <p class="directive-text" id="insp-sop">
               Deploy plainclothes static unit for Shift Alpha (14:00 - 22:00 IST). Monitor ATM vestibules discretely for multi-card cash sweeps.
             </p>
           </div>
-        </div>
+
+          <button class="btn-copy-sop" id="btn-copy-docket" onclick="copySection91Docket()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Section 91 CrPC Field Docket
+          </button>
+        </aside>
       </div>
     </div>
-  </section>
 
-  <!-- Prioritized Hotspots Table Section -->
-  <section id="tactical-matrix" class="section bg-surface">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Actionable Prioritization</span>
-          <h2 class="section-title">Tactical Priority Hotspot Matrix (Top-20)</h2>
-          <p class="section-desc">
-            Chronological ranking of cells with highest predicted cash-out probability, 90% conformal bounds, and primary XAI drivers.
-          </p>
-        </div>
-        <div class="table-search-bar">
-          <input type="text" id="table-search" placeholder="Search cell ID, driver, or coords..." class="input-search">
-        </div>
-      </div>
-
-      <div class="table-responsive">
-        <table class="data-table" id="hotspots-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Cell ID</th>
-              <th>Centroid Lat / Lon</th>
-              <th>Forecast P(Hotspot)</th>
-              <th>Expected Cashouts [90% CI]</th>
-              <th>Risk Tier</th>
-              <th>Primary Explainable AI (XAI) Drivers</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="hotspots-tbody">
-            <!-- Dynamically Populated by JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Machine Learning Benchmarks Section -->
-  <section id="ml-diagnostics" class="section">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Empirical Rigor</span>
-          <h2 class="section-title">Walk-Forward Supervised ML Benchmark Matrix</h2>
-          <p class="section-desc">
-            Evaluated on 18,400 chronological holdout test samples over 46 days. Proves why our Champion Stacked Ensemble and Tree Boosting models dominate linear and naive baselines.
+    <!-- ==================== PANEL 2: TACTICAL PRIORITY MATRIX ==================== -->
+    <div id="panel-matrix" class="deck-panel">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+            Chronological Tactical Priority Hotspots Matrix
+          </h2>
+          <p>
+            Rank-ordered risk directory covering all 400 metropolitan sectors with finite-sample conformal uncertainty bounds, primary XAI attributions, and direct map synchronization.
           </p>
         </div>
       </div>
 
-      <div class="bench-layout">
-        <div class="table-responsive">
-          <table class="data-table">
+      <div class="data-grid-wrapper">
+        <!-- Filter Toolbar -->
+        <div class="grid-filter-toolbar">
+          <div class="search-box-group">
+            <span class="search-icon-inside">🔍</span>
+            <input type="text" id="table-search" placeholder="Search Cell ID, XAI driver, coords..." class="search-input">
+          </div>
+
+          <div class="filter-chips-row">
+            <button class="filter-chip active" data-filter="ALL">
+              All Cells <span class="count-pill" id="cnt-all">400</span>
+            </button>
+            <button class="filter-chip" data-filter="CRITICAL">
+              Critical Risk <span class="count-pill" id="cnt-crit">24</span>
+            </button>
+            <button class="filter-chip" data-filter="ELEVATED">
+              Elevated Risk <span class="count-pill" id="cnt-elev">48</span>
+            </button>
+            <button class="filter-chip" data-filter="EXPLORATION">
+              20% Audit Zones <span class="count-pill" id="cnt-audit">80</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Viewport -->
+        <div style="overflow-x: auto;">
+          <table class="grid-table" id="hotspots-table">
             <thead>
               <tr>
-                <th>Model / Methodology</th>
-                <th>Paradigm</th>
+                <th onclick="sortTable('rank')" style="cursor: pointer;">Rank ↕</th>
+                <th onclick="sortTable('id')" style="cursor: pointer;">Quadrant ID ↕</th>
+                <th>Centroid Coordinates</th>
+                <th onclick="sortTable('prob')" style="cursor: pointer;">Forecast P(Hotspot) ↕</th>
+                <th>Expected 24h Cashouts [90% CI]</th>
+                <th>ATM Terminals</th>
+                <th>Risk Tier</th>
+                <th>Primary Explainable AI (XAI) Attribution</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="hotspots-tbody">
+              <!-- Dynamically Populated with Pagination -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="pagination-toolbar">
+          <span id="pagination-summary">Showing 1 to 10 of 400 records</span>
+          <div class="pagination-controls">
+            <button class="page-btn" id="btn-prev-page" onclick="changePage(-1)">‹ Prev</button>
+            <span id="page-numbers-container" style="display: flex; gap: 4px;"></span>
+            <button class="page-btn" id="btn-next-page" onclick="changePage(1)">Next ›</button>
+            <select id="select-page-size" class="page-btn" style="margin-left: 8px; cursor: pointer;" onchange="changePageSize(this.value)">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="400">All 400</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PANEL 3: ML BENCHMARKS & PLOTS LAB ==================== -->
+    <div id="panel-diagnostics" class="deck-panel">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Walk-Forward Supervised ML Empirical Evaluation Lab
+          </h2>
+          <p>
+            Chronological rolling-origin evaluation over 18,400 holdout test observations across 46 distinct operational horizons. Proves why our Champion Stacked Ensemble and Tree Boosting models dominate linear and naive baselines.
+          </p>
+        </div>
+      </div>
+
+      <!-- Benchmark Matrix Table -->
+      <div class="data-grid-wrapper" style="margin-bottom: 24px;">
+        <div style="overflow-x: auto;">
+          <table class="grid-table">
+            <thead>
+              <tr>
+                <th>Model Architecture / Baseline</th>
+                <th>Paradigm Class</th>
                 <th>PR-AUC</th>
                 <th>ROC-AUC</th>
                 <th>PAI@10</th>
@@ -236,7 +363,7 @@
             <tbody>
               <tr>
                 <td><strong>1. Uniform Random Baseline</strong></td>
-                <td><span class="badge badge-sub">Baseline</span></td>
+                <td><span class="tier-badge" style="background: rgba(148, 163, 184, 0.12); color: var(--text-muted);">Naive</span></td>
                 <td>0.0500</td>
                 <td>0.5000</td>
                 <td>0.97</td>
@@ -246,7 +373,7 @@
               </tr>
               <tr>
                 <td><strong>2. Persistent Lag (Yesterday)</strong></td>
-                <td><span class="badge badge-sub">Baseline</span></td>
+                <td><span class="tier-badge" style="background: rgba(148, 163, 184, 0.12); color: var(--text-muted);">Baseline</span></td>
                 <td>0.2334</td>
                 <td>0.7712</td>
                 <td>6.52</td>
@@ -256,7 +383,7 @@
               </tr>
               <tr>
                 <td><strong>3. Flag + Boost Moving Average</strong></td>
-                <td><span class="badge badge-sub">Baseline</span></td>
+                <td><span class="tier-badge" style="background: rgba(148, 163, 184, 0.12); color: var(--text-muted);">Baseline</span></td>
                 <td>0.4597</td>
                 <td>0.8845</td>
                 <td>8.78</td>
@@ -266,7 +393,7 @@
               </tr>
               <tr>
                 <td><strong>4. Logistic Regression (L2)</strong></td>
-                <td><span class="badge badge-sub">Option A</span></td>
+                <td><span class="tier-badge tier-audit">Option A</span></td>
                 <td>0.4821</td>
                 <td>0.8860</td>
                 <td>8.65</td>
@@ -276,7 +403,7 @@
               </tr>
               <tr>
                 <td><strong>5. Poisson GLM Regressor</strong></td>
-                <td><span class="badge badge-sub">Option B</span></td>
+                <td><span class="tier-badge tier-audit">Option B</span></td>
                 <td>0.4837</td>
                 <td>0.8864</td>
                 <td>8.62</td>
@@ -286,7 +413,7 @@
               </tr>
               <tr>
                 <td><strong>6. Random Forest Classifier</strong></td>
-                <td><span class="badge badge-sub">Option A</span></td>
+                <td><span class="tier-badge tier-audit">Option A</span></td>
                 <td>0.4211</td>
                 <td>0.8752</td>
                 <td>8.04</td>
@@ -296,130 +423,126 @@
               </tr>
               <tr>
                 <td><strong>7. HistGradientBoosting (GBDT)</strong></td>
-                <td><span class="badge badge-sub">Option A</span></td>
+                <td><span class="tier-badge tier-audit">Option A</span></td>
                 <td>0.4692</td>
                 <td>0.8878</td>
-                <td class="text-emerald"><strong>8.81</strong></td>
-                <td class="text-indigo"><strong>0.656</strong></td>
-                <td class="text-cyan"><strong>55.9%</strong></td>
+                <td style="color: var(--emerald); font-weight: 700;">8.81</td>
+                <td style="color: var(--indigo); font-weight: 700;">0.656</td>
+                <td style="color: var(--cyan); font-weight: 700;">55.9%</td>
                 <td>0.1040</td>
               </tr>
-              <tr class="highlight-row">
+              <tr style="background: rgba(52, 211, 153, 0.05);">
                 <td><strong>8. Isotonic Calibrated HGB</strong></td>
-                <td><span class="badge badge-success">Calibrated</span></td>
+                <td><span class="tier-badge tier-elevated">Calibrated</span></td>
                 <td>0.4692</td>
                 <td>0.8878</td>
-                <td><strong>8.81</strong></td>
-                <td><strong>0.656</strong></td>
-                <td><strong>55.9%</strong></td>
-                <td class="text-amber"><strong>0.0370 (-64.4%)</strong></td>
+                <td style="color: var(--emerald); font-weight: 700;">8.81</td>
+                <td style="color: var(--indigo); font-weight: 700;">0.656</td>
+                <td style="color: var(--cyan); font-weight: 700;">55.9%</td>
+                <td style="color: var(--amber); font-weight: 800;">0.0370 (-64.4%)</td>
               </tr>
-              <tr class="champion-row">
+              <tr style="background: rgba(56, 189, 248, 0.09); border-left: 3px solid var(--cyan);">
                 <td><strong>🏆 9. Champion Stacked Classifier</strong></td>
-                <td><span class="badge badge-champion">Champion</span></td>
-                <td class="text-cyan"><strong>0.4785</strong></td>
-                <td class="text-emerald"><strong>0.9348</strong></td>
-                <td class="text-emerald"><strong>8.54</strong></td>
-                <td class="text-indigo"><strong>0.635</strong></td>
-                <td class="text-cyan"><strong>54.8%</strong></td>
-                <td><strong>0.0385</strong></td>
+                <td><span class="tier-badge tier-critical">Champion</span></td>
+                <td style="color: var(--cyan); font-weight: 700;">0.4785</td>
+                <td style="color: var(--emerald); font-weight: 800;">0.9348</td>
+                <td style="color: var(--emerald); font-weight: 700;">8.54</td>
+                <td style="color: var(--indigo); font-weight: 700;">0.635</td>
+                <td style="color: var(--cyan); font-weight: 700;">54.8%</td>
+                <td style="color: var(--amber); font-weight: 800;">0.0385</td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
 
-        <div class="diagnostics-cards">
-          <div class="diag-card">
-            <h4>Diagnostic Highlights & Breakthroughs</h4>
-            <ul class="diag-list">
-              <li><strong>Zero Lookahead Bias:</strong> Chronological walk-forward origin splitting guarantees day-<em>t</em> forecasts rely strictly on data observed on or before day <em>t-1</em>.</li>
-              <li><strong>Moran's I Autocorrelation (+0.6018, p &lt; 0.0001):</strong> Confirms intense terrestrial clustering of mule cash-out points over random dispersion.</li>
-              <li><strong>Dominant Predictive Signals:</strong> Historical recency decay intensity (26.8%) and 7-day withdrawal momentum (18.4%) account for &gt;45% of predictive power.</li>
-              <li><strong>Cost-Sensitive Optimization:</strong> Setting False Negative cost to ₹35k vs False Positive cost of ₹3k identifies optimal cutoff at τ* = 0.05, recovering ₹29.21 Million net.</li>
-            </ul>
-          </div>
+      <!-- Interactive Plot Inspection Deck -->
+      <div class="plots-tabs-container">
+        <div class="plot-nav-deck">
+          <button class="plot-tab-pill active" onclick="switchPlotTab('plot-roc', this)">
+            📈 1. ROC, PR & Calibration Curves
+          </button>
+          <button class="plot-tab-pill" onclick="switchPlotTab('plot-cost', this)">
+            💰 2. Cost-Utility Optimization (τ* = 0.05)
+          </button>
+          <button class="plot-tab-pill" onclick="switchPlotTab('plot-esda', this)">
+            🗺️ 3. Spatial ESDA & Moran's I (+0.6018)
+          </button>
         </div>
 
-        <!-- Visual Empirical Diagnostic Curves Gallery -->
-        <div class="charts-gallery-section" style="margin-top: 36px;">
-          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #f8fafc; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.4rem;">📈</span> Empirical Diagnostic Evaluation Curves & Spatial Verification
-          </h3>
-          <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; max-width: 900px; line-height: 1.5;">
-            High-resolution visual intelligence generated across walk-forward backtesting windows. Click any chart to view or expand in full resolution.
-          </p>
-          <div class="charts-gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
-            
-            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #38bdf8; margin: 0;">ROC, PR & Calibration Diagnostics</h4>
-                <a href="model_performance_charts.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
-              </div>
-              <a href="model_performance_charts.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
-                <img src="model_performance_charts.png" alt="Model Performance ROC and PR Curves" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
-              </a>
-              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
-                Walk-forward ROC (0.9348) and PR curves across all 9 paradigms, alongside isotonic probability calibration dropping Brier loss by 64.4%.
-              </p>
+        <div class="plot-display-card">
+          <!-- Plot 1: ROC / PR -->
+          <div id="plot-roc" class="plot-tab-content">
+            <div class="plot-viewport" onclick="openLightbox('model_performance_charts.png')">
+              <img src="model_performance_charts.png" alt="Walk-Forward Model ROC and PR Curves">
             </div>
-
-            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #34d399; margin: 0;">Cost Utility & Conformal Bounds</h4>
-                <a href="advanced_diagnostic_curves.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
+            <div class="plot-caption">
+              <div>
+                <strong>Figure 4.1:</strong> Walk-Forward ROC Curves (AUC 0.9348), Precision-Recall Profiles, and Isotonic Calibration (64.4% Brier Loss Reduction).
               </div>
-              <a href="advanced_diagnostic_curves.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
-                <img src="advanced_diagnostic_curves.png" alt="Cost Utility and Conformal Coverage Curves" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
-              </a>
-              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
-                Asymmetric loss cost-utility optimization identifying threshold τ* = 0.05 (₹29.21M utility), feature importance, and 90% conformal bands.
-              </p>
+              <button class="hud-pill" onclick="openLightbox('model_performance_charts.png')">🔍 Expand Full Screen</button>
             </div>
+          </div>
 
-            <div class="chart-card" style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 14px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fb7185; margin: 0;">Spatial ESDA & Mule Clusters</h4>
-                <a href="esda_spatial_clusters.png" target="_blank" class="btn btn-sm btn-outline">Full Res ↗</a>
+          <!-- Plot 2: Cost Utility -->
+          <div id="plot-cost" class="plot-tab-content" style="display: none;">
+            <div class="plot-viewport" onclick="openLightbox('advanced_diagnostic_curves.png')">
+              <img src="advanced_diagnostic_curves.png" alt="Cost Utility and Conformal Coverage Curves">
+            </div>
+            <div class="plot-caption">
+              <div>
+                <strong>Figure 4.2:</strong> Cost-Sensitive Net Utility Optimization identifying cutoff τ* = 0.05 (₹29.21 Million recovered) and 90% Conformal Prediction Bounds.
               </div>
-              <a href="esda_spatial_clusters.png" target="_blank" style="display: block; overflow: hidden; border-radius: 8px;">
-                <img src="esda_spatial_clusters.png" alt="ESDA Spatial Clusters and Moran's I" style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s;" loading="lazy">
-              </a>
-              <p style="font-size: 0.82rem; color: #94a3b8; margin: 12px 0 0; line-height: 1.45;">
-                Global Moran's I (+0.6018, p &lt; 0.0001) spatial autocorrelation scatter and terrestrial density clusters vs ATM terminal infrastructure.
-              </p>
+              <button class="hud-pill" onclick="openLightbox('advanced_diagnostic_curves.png')">🔍 Expand Full Screen</button>
             </div>
+          </div>
 
+          <!-- Plot 3: ESDA Moran's I -->
+          <div id="plot-esda" class="plot-tab-content" style="display: none;">
+            <div class="plot-viewport" onclick="openLightbox('esda_spatial_clusters.png')">
+              <img src="esda_spatial_clusters.png" alt="ESDA Spatial Clusters and Moran's I">
+            </div>
+            <div class="plot-caption">
+              <div>
+                <strong>Figure 3.1:</strong> Spatial Autocorrelation (Moran's I = +0.6018, p &lt; 0.0001) verifying terrestrial mule cash-out clustering over random dispersion.
+              </div>
+              <button class="hud-pill" onclick="openLightbox('esda_spatial_clusters.png')">🔍 Expand Full Screen</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Live 1930 Incident Burst Simulator Section -->
-  <section id="simulator" class="section bg-surface">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Interactive Operational Testing</span>
-          <h2 class="section-title">Live Helpline 1930 Cybercrime Incident Surge Simulator</h2>
-          <p class="section-desc">
-            Inject a simulated surge of incoming financial fraud reports from <strong>Helpline 1930 / NCRP</strong>. Observe how the engine calculates the Gamma layering delay and dispatches preemptive interdiction alerts.
+    <!-- ==================== PANEL 4: 1930 INCIDENT RADAR SIMULATOR ==================== -->
+    <div id="panel-simulator" class="deck-panel">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            Helpline 1930 Cybercrime Incident Surge Radar
+          </h2>
+          <p>
+            Inject a simulated surge of incoming financial fraud reports from <strong>Helpline 1930 / NCRP</strong>. Observe how the engine estimates the Gamma layering delay and dispatches preemptive interdiction alerts.
           </p>
         </div>
       </div>
 
-      <div class="sim-grid">
-        <div class="sim-controls-card">
-          <h3>Simulation Parameter Controls</h3>
-          
-          <div class="form-group">
-            <label for="sim-n">Complaints in Surge Batch: <span id="lbl-sim-n" class="val-badge">20 reports</span></label>
-            <input type="range" id="sim-n" min="5" max="50" value="20" step="5" class="slider">
+      <div class="radar-grid">
+        <!-- Controls Card -->
+        <div class="radar-card">
+          <h3 style="margin-bottom: 18px; font-size: 1.15rem; color: var(--text-pure);">Surge Inflow Parameters</h3>
+
+          <div class="radar-input-group">
+            <label for="sim-n">
+              <span>Complaints in Surge Batch:</span>
+              <span class="mono" style="color: var(--cyan);" id="lbl-sim-n">20 Reports</span>
+            </label>
+            <input type="range" id="sim-n" min="5" max="50" value="20" step="5" class="radar-slider">
           </div>
 
-          <div class="form-group">
+          <div class="radar-input-group">
             <label for="sim-category">Primary Fraud Vector</label>
-            <select id="sim-category" class="select-input">
+            <select id="sim-category" class="radar-select">
               <option value="Investment Scam">Investment & Stock Scam</option>
               <option value="UPI Phishing">UPI Payment Gateway Phishing</option>
               <option value="Part-time Job Scam">Part-time Job / Task Scam</option>
@@ -428,166 +551,178 @@
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="sim-loss">Mean Defrauded Severity: <span id="lbl-sim-loss" class="val-badge">₹50,000</span></label>
-            <input type="range" id="sim-loss" min="15000" max="250000" value="50000" step="5000" class="slider">
+          <div class="radar-input-group">
+            <label for="sim-loss">
+              <span>Mean Defrauded Severity:</span>
+              <span class="mono" style="color: var(--cyan);" id="lbl-sim-loss">₹50,000</span>
+            </label>
+            <input type="range" id="sim-loss" min="15000" max="250000" value="50000" step="5000" class="radar-slider">
           </div>
 
-          <button id="btn-run-sim" class="btn btn-primary btn-block">🚨 Inject Live Helpline 1930 Surge</button>
+          <button id="btn-run-sim" class="btn-trigger-burst">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Inject Live Helpline 1930 Surge
+          </button>
         </div>
 
-        <div class="sim-output-card">
-          <div class="sim-alert-banner" id="sim-alert-box">
-            <div class="alert-icon">⚠️</div>
-            <div class="alert-content">
-              <h4 id="sim-alert-title">STANDBY: Ready to simulate telemetry stream</h4>
-              <p id="sim-alert-desc">Configure burst parameters on the left and click 'Inject Live Helpline 1930 Surge' to begin.</p>
+        <!-- Radar Telemetry Card -->
+        <div class="radar-card">
+          <div class="radar-alert-card" id="sim-alert-box">
+            <div class="radar-alert-icon">⚡</div>
+            <div class="radar-alert-body">
+              <h4 id="sim-alert-title">RADAR STANDBY: Listening for NCRP Telemetry</h4>
+              <p id="sim-alert-desc">Configure burst parameters on the left and trigger simulation to calculate the cash-out convergence window.</p>
             </div>
           </div>
 
-          <div class="sim-metrics-row">
-            <div class="sim-metric">
-              <span class="sm-label">Total Inflow Loss</span>
-              <span class="sm-val" id="sm-loss">₹0</span>
+          <div class="radar-stats-bar">
+            <div class="radar-stat-box">
+              <div class="radar-stat-lbl">Projected Total Inflow</div>
+              <div class="radar-stat-val" style="color: var(--cyan);" id="sm-loss">₹0</div>
             </div>
-            <div class="sim-metric">
-              <span class="sm-label">Mean Interdiction Window</span>
-              <span class="sm-val" id="sm-window">--</span>
+            <div class="radar-stat-box">
+              <div class="radar-stat-lbl">Convergence Window</div>
+              <div class="radar-stat-val" style="color: var(--amber);" id="sm-window">--</div>
             </div>
-            <div class="sim-metric">
-              <span class="sm-label">Convergence Target Hub</span>
-              <span class="sm-val text-rose" id="sm-hub">--</span>
+            <div class="radar-stat-box">
+              <div class="radar-stat-lbl">Primary Convergence Hub</div>
+              <div class="radar-stat-val" style="color: var(--rose);" id="sm-hub">--</div>
             </div>
           </div>
 
-          <h4>Real-Time Telemetry Audit Stream</h4>
-          <div class="telemetry-feed" id="telemetry-feed">
-            <div class="telemetry-placeholder">No active surge injected. Ready for simulation.</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono);">Real-Time NCRP Telemetry Stream:</span>
+            <span class="mono" style="font-size: 0.72rem; color: var(--emerald);">STATUS: READY</span>
+          </div>
+
+          <div class="streaming-terminal" id="telemetry-feed">
+            <div style="color: var(--text-dim); text-align: center; padding: 20px 0;">No active burst. Click 'Inject Live Helpline 1930 Surge' to simulate incoming stream.</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Multi-Agency Dispatch & Download Center Section -->
-  <section id="dispatch" class="section">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Operational Deployment</span>
-          <h2 class="section-title">Multi-Agency Dispatch & Intelligence Download Center</h2>
-          <p class="section-desc">
-            Direct access to production CSV field orders, banking switch directives, standard QGIS GeoJSON shapefiles, and master evaluation thesis.
+    <!-- ==================== PANEL 5: DISPATCH & DOWNLOAD CENTER ==================== -->
+    <div id="panel-dispatch" class="deck-panel">
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Multi-Agency Tactical Dispatch & Intelligence Download Center
+          </h2>
+          <p>
+            Direct download access to verified field orders, banking switch step-up friction directives, standard GeoJSON shapefiles, and master evaluation thesis documents.
           </p>
         </div>
       </div>
 
-      <div class="dispatch-cards-grid">
-        <div class="download-card">
-          <div class="dl-icon">🚔</div>
-          <div class="dl-content">
-            <h3>Police Patrol Field Orders</h3>
-            <p>Field deployment dockets with priority ranks, coordinates, designated shift assignments, and plainclothes surveillance protocols.</p>
-            <a href="reports/police_patrol_dispatch_orders.csv" download="police_patrol_dispatch_orders.csv" class="btn btn-outline btn-block">📥 Download Police CSV</a>
+      <div class="dispatch-grid">
+        <!-- 1. Police Orders -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-police">LAW ENFORCEMENT</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">CSV • 14.2 KB</span>
+            </div>
+            <h3>Police Patrol Shift Field Orders</h3>
+            <p>Designated patrol orders specifying priority ranks, coordinate bounds, plainclothes shifts (Alpha/Bravo), and surveillance directives.</p>
           </div>
+          <a href="reports/police_patrol_dispatch_orders.csv" download class="btn-dl">
+            Download Police Orders (CSV)
+          </a>
         </div>
 
-        <div class="download-card">
-          <div class="dl-icon">🏦</div>
-          <div class="dl-content">
-            <h3>Bank ATM Friction Directives</h3>
-            <p>Banking switch instructions for terminal IDs, risk tiers, step-up Aadhaar/OTP 2FA mandates, and CCTV 90-day retention buffers.</p>
-            <a href="reports/bank_atm_friction_directives.csv" download="bank_atm_friction_directives.csv" class="btn btn-outline btn-block">📥 Download Bank CSV</a>
+        <!-- 2. Bank Friction -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-bank">BANKING SECURITY</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">CSV • 18.6 KB</span>
+            </div>
+            <h3>Bank ATM Dynamic Friction Directives</h3>
+            <p>Automated API payload for ATM acquiring switches: enforces dynamic single-withdrawal caps (INR 10,000) and CCTV preservation triggers.</p>
           </div>
+          <a href="reports/bank_atm_friction_directives.csv" download class="btn-dl">
+            Download Bank Directives (CSV)
+          </a>
         </div>
 
-        <div class="download-card">
-          <div class="dl-icon">🗺️</div>
-          <div class="dl-content">
-            <h3>Standard QGIS / ArcGIS GeoJSON</h3>
-            <p>400-cell polygon FeatureCollection with risk scores, coordinates, conformal bounds, and XAI factors. Ready to drag into GIS software.</p>
-            <a href="data/hotspot_forecast_cells.geojson" download="hotspot_forecast_cells.geojson" class="btn btn-outline btn-block">📥 Download GeoJSON</a>
+        <!-- 3. GeoJSON -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-gis">GIS TELEMETRY</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">GeoJSON • 84.1 KB</span>
+            </div>
+            <h3>Hotspot Quadrants Shapefile</h3>
+            <p>Standard OGC-compliant GeoJSON feature collection containing all 400 grid cell bounding polygons for ArcGIS, QGIS, and dispatch CAD systems.</p>
           </div>
+          <a href="data/hotspot_forecast_cells.geojson" download class="btn-dl">
+            Download Spatial GeoJSON
+          </a>
         </div>
 
-        <div class="download-card">
-          <div class="dl-icon">📄</div>
-          <div class="dl-content">
-            <h3>Master Capstone Thesis (14 Pages)</h3>
-            <p>Exhaustive academic capstone report detailing problem definition, literature review, methodology, backtesting, and ethics.</p>
-            <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="btn btn-outline btn-block">📄 View Master Thesis (PDF)</a>
+        <!-- 4. Thesis PDF -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-thesis">RESEARCH DOSSIER</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">PDF • 3.2 MB</span>
+            </div>
+            <h3>Master Capstone Thesis & Evaluation</h3>
+            <p>Complete academic report detailing problem definition, literature review, spatiotemporal feature engineering, and walk-forward verification.</p>
           </div>
+          <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank" class="btn-dl">
+            View Capstone Thesis (PDF)
+          </a>
         </div>
 
-        <div class="download-card">
-          <div class="dl-icon">📊</div>
-          <div class="dl-content">
-            <h3>SIH Jury Pitch Deck (10 Slides)</h3>
-            <p>High-density landscape executive presentation deck prepared for the official Smart India Hackathon jury defense.</p>
-            <a href="presentation/SIH26184_Jury_Pitch_Deck.pdf" target="_blank" class="btn btn-outline btn-block">📊 View Jury Pitch Deck (PDF)</a>
+        <!-- 5. Pitch Deck -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-thesis">HACKATHON JURY</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">PDF • 1.8 MB</span>
+            </div>
+            <h3>SIH26184 Executive Pitch Deck</h3>
+            <p>12-slide high-impact presentation deck covering the problem gap, ML architecture, empirical outperformance, and national deployment roadmap.</p>
           </div>
+          <a href="presentation/SIH26184_Jury_Pitch_Deck.pdf" target="_blank" class="btn-dl">
+            View Jury Pitch Deck (PDF)
+          </a>
         </div>
 
-        <div class="download-card">
-          <div class="dl-icon">📈</div>
-          <div class="dl-content">
-            <h3>Interactive Jupyter Notebook</h3>
-            <p>Complete executable evaluation notebook walking through data loading, Moran's I, model training, stacking, and calibration.</p>
-            <a href="capstone_interactive_walkthrough.ipynb" download="capstone_interactive_walkthrough.ipynb" class="btn btn-outline btn-block">📓 Download Notebook (.ipynb)</a>
+        <!-- 6. Interactive Notebook -->
+        <div class="dispatch-card">
+          <div>
+            <div class="dispatch-top">
+              <span class="dispatch-tag tag-police">CODE ARTIFACT</span>
+              <span class="mono" style="font-size: 0.72rem; color: var(--text-dim);">IPYNB • 45 KB</span>
+            </div>
+            <h3>Jupyter Walkthrough Notebook</h3>
+            <p>Self-contained executable notebook replicating synthetic generation, DBSCAN clustering, walk-forward evaluation, and XAI attribution.</p>
           </div>
+          <a href="capstone_interactive_walkthrough.ipynb" download class="btn-dl">
+            Download Notebook (.ipynb)
+          </a>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Governance & Ethics Section -->
-  <section id="governance" class="section bg-surface">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-tag">Responsible AI Governance</span>
-        <h2 class="section-title">Statutory Compliance & Ethical Guardrails</h2>
-        <p class="section-desc">
-          Aligned with the Digital Personal Data Protection (DPDP) Act 2023 (India) and responsible policing ethics.
-        </p>
-      </div>
+  </main>
 
-      <div class="ethics-grid">
-        <div class="ethics-card">
-          <h4>1. The Epistemic Guardrail</h4>
-          <p><strong>Spatial Association ≠ Prediction ≠ Proof of Guilt.</strong> A forecasted hotspot is a statistical probability, NOT legal evidence. Any citizen withdrawing funds at an ATM located inside a forecasted cell is entirely presumed innocent under Bharatiya Sakshya Adhiniyam 2023.</p>
-        </div>
-        <div class="ethics-card">
-          <h4>2. 80/20 Exploration Safeguard</h4>
-          <p>Directing surveillance exclusively to historically flagged ATM clusters creates a self-reinforcing bias loop (Ensign et al., 2018). We enforce an <strong>80/20 patrol protocol</strong>: 20% of capacity monitors random background cells to gather unbiased validation data.</p>
-        </div>
-        <div class="ethics-card">
-          <h4>3. DPDP Act 2023 Compliance</h4>
-          <p>Zero PII Ingestion: Personal names, phone numbers, Aadhaar numbers, and full debit card numbers are strictly excluded. Mathematical k-anonymity is enforced via coarse 1km × 1km spatial grid cell aggregation.</p>
-        </div>
-        <div class="ethics-card">
-          <h4>4. Human-in-the-Loop Exclusivity</h4>
-          <p>The platform is strictly a tactical decision-support system. It is technically barred from executing automated coercive enforcement actions (such as automated arrests or arbitrary account liens) without human officer review.</p>
-        </div>
-      </div>
+  <!-- 3. IMAGE LIGHTBOX MODAL -->
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" src="" alt="Expanded Diagnostic Curve">
     </div>
-  </section>
+  </div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <div>
-        <span class="brand-title">CYBERWATCH // SIH26184</span>
-        <p class="footer-desc">Undergraduate B.Tech AI/ML Capstone Project | Smart India Hackathon 2026 Evaluation</p>
-      </div>
-      <div class="footer-links">
-        <a href="https://github.com/harshabacham/new" target="_blank">GitHub Repository</a>
-        <a href="Cybercrime_Withdrawal_Forecasting_Final_Report.pdf" target="_blank">Full Report (PDF)</a>
-        <a href="presentation/SIH26184_Jury_Pitch_Deck.pdf" target="_blank">Jury Slides (PDF)</a>
-      </div>
-    </div>
-  </footer>
+  <!-- 4. FLOATING TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
 
-  <!-- Leaflet JS (Reliable CDN) -->
+  <!-- Leaflet JS (Cloudflare cdnjs) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <!-- Application Script -->
   <script src="app.js"></script>
